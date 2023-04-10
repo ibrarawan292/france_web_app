@@ -1,20 +1,20 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../../App";
 
-const Button = ({title}) => {
-  const { setShowModal, setEditData, setIsEdit, setShowZipped } = useContext(ThemeContext);
-
+const Button = ({title, handleShowModal}) => {
+  // const { setShowModal, setEditData, setIsEdit, setShowZipped } = useContext(ThemeContext);
+  
   return (
     <div>
       <button
         type="button"
         class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-blue-600"
-        onClick={() => {
-          setShowModal(true);
-          setEditData(null);
-          setIsEdit(false);
-          setShowZipped(true)
-        }}
+        onClick={handleShowModal
+          // setShowModal(true);
+          // setEditData(null);
+          // setIsEdit(false);
+          // setShowZipped(true)
+        }
       >
         <svg
           class="h-3.5 w-3.5 mr-2"

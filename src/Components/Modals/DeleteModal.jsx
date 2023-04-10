@@ -1,9 +1,9 @@
 import React from "react";
 
-const DeleteModal = ({showDelete, setShowDelete}) => {
+const DeleteModal = ({handleDelete, setShowDelete, deleteId}) => {
   return (
     <>
-      {showDelete ? (
+      {/* {showDelete ? ( */}
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-0 p-0">
             <div className="relative w-auto mt-20 mx-auto max-w-full">
@@ -31,8 +31,9 @@ const DeleteModal = ({showDelete, setShowDelete}) => {
                     className="btn-hover text-black font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() => {
-                    //   handleDelete(id);
-                      setShowDelete(false);
+                      
+                      handleDelete(deleteId);
+                      setShowDelete(false)
                     }}
                   >
                     Delete
@@ -43,7 +44,7 @@ const DeleteModal = ({showDelete, setShowDelete}) => {
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
-      ) : null}
+      {/* ) : null} */}
     </>
   );
 };

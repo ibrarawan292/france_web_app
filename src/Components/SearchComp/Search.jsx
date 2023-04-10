@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const Search = () => {
+const Search = ({ onSearch }) => {
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearch = () => {
+    onSearch(searchValue);
+  };
   return (
     <div>
       <form
         class="flex items-center"
-        // onSubmit={(e) => {
-        //   e.preventDefault();
-        //   {
-        //     searchUsers.length <= 0
-        //       ? toast.error("Search form is empty")
-        //       : getQueries(searchUsers);
-        //   }
-        // }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
       >
         <div class="relative w-full">
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -34,17 +36,10 @@ const Search = () => {
             type="text"
             id="simple-search"
             className="border-2 border-black text-black rounded-lg focus:border-black block w-full pl-10 p-1  dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500 "
-            placeholder="Search"
             required=""
-            // value={searchUsers}
-            // onChange={(e) => {
-            //   setSearchUser(e.target.value);
-            //   if (e.target.value === "") {
-            //     setTableData(tempData.data.user_queries);
-            //     setTotalPages(tempData.data.pages);
-            //     setTotalRecords(tempData.data.total_records);
-            //   }
-            // }}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder={`Search `}
           />
         </div>
       </form>

@@ -61,7 +61,7 @@ API.interceptors.response.use(
             access_token: res.data.access_token,
             refresh_token: res.data.refresh_token,
           };
-          localStorage.setItem("AdminAuth", JSON.stringify(items));
+          localStorage.setItem("UserAuth", JSON.stringify(items));
           // Navigate("/admin-dashboard");
           API.defaults.headers.common["Authorization"] =
             "Bearer " + res.data.access_token;

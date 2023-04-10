@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Search from "../../Components/SearchComp/Search";
 import Button from "../../Components/ButtonsComp/Button";
 import ExportAll from "../../Components/ButtonsComp/ExportAll";
@@ -9,59 +9,63 @@ import Category from "../../Components/Filters/Category";
 import Country from "../../Components/Filters/Country";
 import ZipCode from "../../Components/Filters/ZipCode";
 import Filters from "../../Components/Filters/Filters";
-import { useStateContext} from "../../contexts/ContextProvider";
+import { useStateContext } from "../../contexts/ContextProvider";
 import { ThemeContext } from "../../App";
+import AddEditModal from "../../Components/Modals/AddEditModal";
+import TotalServices from "../../TotalServices";
 const ManageQuery = () => {
-  const [Loader, setLoader] = useState(true);
-  const [record, setRecord] = useState(0);
-
+  const [loader, setLoader] = useState(false);
+  const [showQueryModal, setShowQueryModal] = useState(false);
+  const [editQueryData, setEditQueryData] = useState([]);
+  const [isEditQuery, setIsEditQuery] = useState(false);
 
   const [zipcode, setZipcode] = useState("");
   const [category, setCategory] = useState("");
   const [country, setCountry] = useState("");
+
+  const [data, setData] = useState("")
   // Pagination
   const [totalRecords, setTotalRecords] = useState("");
+  const [record, setRecord] = useState(0);
   const [NumberOfRecordsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [goto, setGoto] = useState("");
   const [totalPages, setTotalPages] = useState(1);
-  const [searchUsers, setSearchUser] = useState("");
   const [tempData, setTempData] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+ const getQueries = async (str) => { 
+    setLoader(true);
+    try {
+      const res = await TotalServices.getQueriesList(
+        NumberOfRecordsPerPage,
+        (currentPage - 1) * NumberOfRecordsPerPage,
+        {
+          query: searchTerm,
+        }
+      );
+        console.log(res.data)
+      if (res.data.status === 200) {
+        if (res.data.pages === 1) {
+          setCurrentPage(1);
+        }
+        setLoader(false);
+        setData(res.data.user_queries);
+        setTotalPages(res.data.pages);
+        if (searchTerm === "") {
+          setTempData(res);
+        }
+        setTotalRecords(res.data.total_records);
+      } else if (res.data.status !== 200) {
+        document.getElementById("error").style.display = "block";
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
 
-  // const getQueries = async (str) => {
-  //   setLoader(true);
-  //   try {
-  //     const res = await TotalServices.ListUserQueries(
-  //       NumberOfRecordsPerPage,
-  //       (currentPage - 1) * NumberOfRecordsPerPage,
-  //       {
-  //         query: searchUsers,
-  //       }
-  //     );
-
-  //     if (res.data.status === 200) {
-  //       if (res.data.pages === 1) {
-  //         setCurrentPage(1);
-  //       }
-  //       setLoader(false);
-  //       setTableData(res.data.user_queries);
-  //       setTotalPages(res.data.pages);
-  //       if (searchUsers === "") {
-  //         setTempData(res);
-  //       }
-  //       setTotalRecords(res.data.total_records);
-  //     } else if (res.data.status !== 200) {
-  //       document.getElementById("error").style.display = "block";
-  //     }
-  //   } catch (error) {
-  //     console.log("error ", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getQueries("");
-  //   console.log(tempData, "tempData");
-  // }, [refresh, searchUsers, currentPage]);
+  useEffect(() => {
+    getQueries();
+  }, [ searchTerm, currentPage]);
 
   // ADD Query API STARTS
   // const CreateQuery = async () => {
@@ -93,9 +97,9 @@ const ManageQuery = () => {
   //     }
   //   }
   // };
-  // // ADD Query API ENDS
+  // ADD Query API ENDS
 
-  // // DELETE QUERY API STARTS
+  // DELETE QUERY API STARTS
   // const UserDeleteQuery = async (id) => {
   //   try {
   //     const res = await TotalServices.UserDeleteQuery(id);
@@ -165,6 +169,8 @@ const ManageQuery = () => {
     countries: ["USA", "Canada", "Mexico", "France"],
   };
 
+ 
+
   const handleZipcodeChange = (event) => {
     setZipcode(event.target.value);
   };
@@ -176,6 +182,23 @@ const ManageQuery = () => {
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
   };
+
+  const handleShowAddQueryModal = () => {
+    setShowQueryModal(true);
+    setIsEditQuery(false);
+    setEditQueryData(null);
+  };
+
+  const handleShowEditModal = (data) => {
+    console.log(data);
+    setShowQueryModal(true);
+    setEditQueryData(data);
+    setIsEditQuery(true);
+  };
+
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
   return (
     <>
       <section class=" w-[90%]  py-3 sm:py-5">
@@ -184,12 +207,15 @@ const ManageQuery = () => {
             <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
               <div class="flex items-center flex-1 space-x-4">
                 {/* search component--->> */}
-                <Search />
+                <Search onSearch={handleSearch} />
               </div>
 
               <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
                 {/* create query button-->> */}
-                <Button  title={"Create Query"} />
+                <Button
+                  title={"Create Query"}
+                  handleShowModal={handleShowAddQueryModal}
+                />
                 {/* export all button-->> */}
                 <ExportAll />
               </div>
@@ -222,7 +248,13 @@ const ManageQuery = () => {
             </div>
             <div class="overflow-x-auto">
               {/* query table---->> */}
-              <Table />
+              <Table
+                queryData={data}
+                handleShowEditModal={handleShowEditModal}
+                loader={loader}
+                setLoader={setLoader}
+                getQueryData={getQueries}
+              />
             </div>
             <nav
               class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
@@ -243,6 +275,14 @@ const ManageQuery = () => {
                 />
               </ul>
             </nav>
+            {showQueryModal ? (
+              <AddEditModal
+                setShowQueryModal={setShowQueryModal}
+                editQueryData={editQueryData}
+                isEditQuery={isEditQuery}
+                getQueryData={getQueries}
+              />
+            ) : null}
           </div>
         </div>
       </section>

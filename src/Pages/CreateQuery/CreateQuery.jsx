@@ -8,38 +8,35 @@ import Button from "../../Components/ButtonsComp/Button";
 import Search from "../../Components/SearchComp/Search";
 import TotalServices from "../../TotalServices";
 import ZipCodeTable from "../../Components/Table/ZipCodeTable";
+import ZipModal from "../../Components/Modals/ZipModal";
 
 const CreateQuery = () => {
   const [loader, setLoader] = useState(false);
-  // const options = {
-  //   zipcodes: ["10001", "10002", "10003", "10004"],
-  //   categories: ["Category 1", "Category 2", "Category 3", "Category 4"],
-  //   countries: ["USA", "Canada", "Mexico", "France"],
-  // };
+  const [showZipModal, setShowZipModal] = useState(false);
+  const [editZippedData, setEditZippedData] = useState([]);
+  const [isEditZipped, setIsEditZipped] = useState(false);
+ const [editId, setEditId] = useState([]);
+  const [zipData, setZipData] = useState("");
+  // const [category, setCategory] = useState("");
+  // const [country, setCountry] = useState("");
 
-  const [zipcode, setZipcode] = useState("");
-  const [category, setCategory] = useState("");
-  const [country, setCountry] = useState("");
-
+  const [record, setRecord] = useState(0);
   const [totalRecords, setTotalRecords] = useState("");
   const [NumberOfRecordsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [goto, setGoto] = useState("");
   const [totalPages, setTotalPages] = useState(1);
-  const [searchUsers, setSearchUser] = useState("");
-
-  const handleZipcodeChange = (event) => {
-    setZipcode(event.target.value);
-  };
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getZipCodeList = async () => {
     setLoader(true);
+    console.log(searchTerm);
     try {
       const res = await TotalServices.getZipCode(
         NumberOfRecordsPerPage,
         (currentPage - 1) * NumberOfRecordsPerPage,
         {
-          keyword: "",
+          keyword: searchTerm,
         }
       );
       console.log(res, "res");
@@ -48,11 +45,15 @@ const CreateQuery = () => {
           setCurrentPage(1);
         }
         setLoader(false);
-        setZipcode(res.data.zipcodes);
+        setZipData(res.data.zipcodes);
         setTotalPages(res.data.pages);
+        if (searchTerm === "") {
+          // setTempData(res);
+        }
         setTotalRecords(res.data.total_records);
+        // setTempData(res);
+        // setTempDataValue(res.data.plans);
         setLoader(false);
-        console.log(res.data.plans);
       } else if (res.data.status !== 200) {
         document.getElementById("error").style.display = "block";
       }
@@ -63,7 +64,25 @@ const CreateQuery = () => {
 
   useEffect(() => {
     getZipCodeList();
-  }, []);
+  }, [searchTerm, currentPage]);
+
+  const handleShowAddZipModal = () => {
+    setShowZipModal(true);
+    setIsEditZipped(false);
+    setEditZippedData(null);
+  };
+
+  const handleShowEditModal = (data , id) => {
+    console.log(data, id);
+    setShowZipModal(true);
+    setEditZippedData(data);
+    setEditId(id)
+    setIsEditZipped(true);
+  };
+
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+  };
   return (
     <section class=" w-[90%]  py-3 sm:py-5">
       <div class="px-4 mx-auto max-w-screen-2xl lg:px-12">
@@ -71,13 +90,15 @@ const CreateQuery = () => {
           <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
             <div class="flex items-center flex-1 space-x-4">
               {/* search component--->> */}
-              <Search />
+              <Search onSearch={handleSearch} />
             </div>
 
             <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
               {/* create zip button-->> */}
-              <Button title={"Create ZipCode"}/>
-             
+              <Button
+                title={"Create ZipCode"}
+                handleShowModal={handleShowAddZipModal}
+              />
             </div>
           </div>
 
@@ -97,27 +118,42 @@ const CreateQuery = () => {
           </div> */}
           <div class="overflow-x-auto">
             {/* query table---->> */}
-            <ZipCodeTable zipcode={zipcode} getZipCodeList={getZipCodeList}/>
+            <ZipCodeTable
+              zipData={zipData}
+              handleShowEditModal={handleShowEditModal}
+              loader={loader}
+              setLoader={setLoader}
+              getZipCodeList={getZipCodeList}
+            />
           </div>
           <nav
             class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
             aria-label="Table navigation"
           >
-            {/* <ResultShowing /> */}
+            <ResultShowing />
             <ul class="inline-flex items-stretch -space-x-px">
-              {/* <Pagination
-                  totalRecords={totalRecords}
-                  setRecord={setRecord}
-                  record={record}
-                  NumberOfRecordsPerPage={NumberOfRecordsPerPage}
-                  setCurrentPage={setCurrentPage}
-                  currentPage={currentPage}
-                  setGoto={setGoto}
-                  goto={goto}
-                  totalPages={totalPages}
-                /> */}
+              <Pagination
+                totalRecords={totalRecords}
+                setRecord={setRecord}
+                record={record}
+                NumberOfRecordsPerPage={NumberOfRecordsPerPage}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                setGoto={setGoto}
+                goto={goto}
+                totalPages={totalPages}
+              />
             </ul>
           </nav>
+          {showZipModal ? (
+            <ZipModal
+              setShowZipModal={setShowZipModal}
+              editZippedData={editZippedData}
+              isEditZipped={isEditZipped}
+              getZipCode={getZipCodeList}
+              editId={editId}
+            />
+          ) : null}
         </div>
       </div>
     </section>

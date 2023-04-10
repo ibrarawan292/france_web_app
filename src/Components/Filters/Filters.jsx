@@ -18,7 +18,7 @@ const Filters = ({ label, options, value, onChange }) => {
       <option value="">Select {label}</option>
       {options && options.map((option, index) => (
         <option key={index} value={option}>
-          {option.zipcode}
+          {option}
         </option>
       ))}
     </select>
