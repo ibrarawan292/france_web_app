@@ -7,6 +7,7 @@ import {
 import DeleteModal from "../Modals/DeleteModal";
 import { ScaleLoader } from "react-spinners";
 import TotalServices from "../../TotalServices";
+import { toast } from "react-toastify";
 
 const Table = ({
   queryData,
@@ -14,16 +15,13 @@ const Table = ({
   loader,
   setLoader,
   getQueryData,
+  ExportCSV
 }) => {
-  console.log(queryData);
-  const [data, setData] = useState("");
+
+ console.log(queryData)
   const [showDelete, setShowDelete] = useState(false);
   const [deleteId, setDeleteId] = useState("");
-  // const data = [{ title: "query", date: "0/45/24", status: "active" }];
 
-  // useEffect(() => {
-  //   getQueryData()
-  // }, [])
   const handleDeleteQuery = async (id) => {
     console.log(id);
     setLoader(true);
@@ -31,7 +29,7 @@ const Table = ({
       const res = await TotalServices.deleteQuery(id);
       console.log(res);
       if (res.status === 200) {
-        toast.success("Zip Code Deleted successfully");
+        toast.success("Query Deleted successfully");
         setShowDelete(false);
         setLoader(false);
         getQueryData();
@@ -40,24 +38,25 @@ const Table = ({
       console.log(error);
     }
   };
+
   return (
     <>
-      {loader || queryData === 0 ? (
+      {loader || queryData ===  0 ? (
         <>
           <div className="bg-white p-10 flex justify-center">
-            <ScaleLoader color={"var(--bg-fill4)"} loading={loader} size={20} />
+            <ScaleLoader className="text-black" loading={loader} size={20} />
           </div>
         </>
       ) : (
         <>
-          {queryData && queryData.length === 0 ? (
+          {queryData.length == 0 ? (
             <>
-              <div className="text-center p-16">
+              <div className="text-center  p-16">
                 <button
-                  style={{ background: "var(--bg-fill4)" }}
-                  className="btn-hover  py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-black"
+                  
+                  className="btn-hover bg-black py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-white"
                 >
-                  No data Found
+                  No Data Found
                 </button>
               </div>
             </>
@@ -99,8 +98,8 @@ const Table = ({
                               {item.query_name}
                             </td>
                             <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
-                            {item.location.map((zip) => {
-                                return <p>{zip}</p>;
+                            {item.location.map((loc) => {
+                                return <p>{loc.label}</p>;
                               })}
                             </td>
                             <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
@@ -120,7 +119,7 @@ const Table = ({
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  // ExportCSV(item.query_id);
+                                  ExportCSV(item.query_id);
                                 }}
                                 type="button"
                                 className="btn-hover3 rounded-md py-3  flex flex-row"
@@ -145,7 +144,7 @@ const Table = ({
                               <button
                                 onClick={() => {
                                   setShowDelete(true);
-                                  setDeleteId("item");
+                                  setDeleteId(item.query_id);
                                 }}
                                 type="button"
                                 className="px-1 py-2 rounded-full border text-red-500 hover:text-red-400 text-lg border-white "
@@ -170,7 +169,7 @@ const Table = ({
             </>
           )}
         </>
-      )}
+       )} 
     </>
   );
 };

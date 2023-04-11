@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 // import { useStateContext } from "../../contexts/ContextProvider";
 // import { ThemeContext } from "../../App";
+import CreatableSelect from 'react-select/creatable';
 import TotalServices from "../../TotalServices";
 import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,108 +10,51 @@ const AddEditModal = ({
   setShowQueryModal,
   editQueryData,
   isEditQuery,
+  editQueryId,
+  zipcodeList,
+  Locations
 }) => {
   const [QueryText, setQueryText] = useState("");
   const [newZipCode, setNewZipCode] = useState("");
   const [location, setLocation] = useState([]);
-  const [zipcode, setZipCode] = useState([]);
-  const [selectedZipCode, setSelectedZipCode] = useState([]);
-  const [status, setStatus] = useState("");
-  const [loader, setLoader] = useState(false);
-  const [record, setRecord] = useState(0);
-  const [totalRecords, setTotalRecords] = useState("");
-  const [NumberOfRecordsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [goto, setGoto] = useState("");
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedZipcode, setSelectedZipcode] = useState(null);
-  const getZipCodeList = async () => {
-    setLoader(true);
-    console.log(searchTerm);
-    try {
-      const res = await TotalServices.getZipCode(
-        NumberOfRecordsPerPage,
-        (currentPage - 1) * NumberOfRecordsPerPage,
-        {
-          keyword: searchTerm,
-        }
-      );
-      console.log(res, "res");
-      if (res.data.status === 200) {
-        if (res.data.pages === 1) {
-          setCurrentPage(1);
-        }
-        setLoader(false);
-
-        console.log(res.data.zipcodes);
-        setZipCode(res.data.zipcodes);
-        setTotalPages(res.data.pages);
-        if (searchTerm === "") {
-          // setTempData(res);
-        }
-        setTotalRecords(res.data.total_records);
-        // setTempData(res);
-        // setTempDataValue(res.data.plans);
-        setLoader(false);
-      } else if (res.data.status !== 200) {
-        document.getElementById("error").style.display = "block";
-      }
-    } catch (error) {
-      console.log("error ", error);
-    }
-  };
+  const [zipCode, setZipCode] = useState([]);
+  // const [selectedZipCode, setSelectedZipCode] = useState([]);
+  // const [selectedLocation, setSelectedLocation] = useState([]);
 
   useEffect(() => {
-    getZipCodeList();
-  }, [searchTerm, currentPage]);
-  // const zipcodes = [
-  //   { label: "1000", value: 1000 },
-  //   { label: "10001", value: 10001 },
-  //   { label: "10002", value: 10002 },
-  //   { label: "10003", value: 10003 },
-  // ];
-  // const handleZipcodeChange = (selectedOption) => {
-  //   setSelectedZipcode(selectedOption.value);
+    if(editQueryData) {
+      setQueryText(editQueryData.query_name);
+      setLocation(editQueryData.location);
+      setZipCode(editQueryData.zipcode_data)
+    }
+  },[editQueryData])
+
+
+  // const handleZipCodeChange = (selectedOptions) => {
+  //   setZipCode(selectedOptions);
   // };
-  const locations = [
-    {
-      label: "USA",
-      value: "USA",
-    },
-    {
-      label: "CANADA",
-      value: "CANADA",
-    },
-    {
-      label: "MEXICO",
-      value: "MEXICO",
-    },
-    {
-      label: "FRANCE",
-      value: "FRANCE",
-    },
-  ];
+
+
 
   // console.log(editData)
 
   const CreateQuery = async () => {
-    console.log(location, zipcode);
     let loc = [];
     location.map((item) => {
       loc.push(item.value);
     });
+    // console.log(zipCode)
     let zip = [];
-    selectedZipCode.map((item) => {
+    zipCode.map((item) => {
       zip.push(item.value);
     });
     let data = {
       query: QueryText,
       location: loc,
-      zipcodes: zip,
+      zipcodes:zip,
     };
-    console.log(loc, zip);
-    if (location === [] || QueryText === "" || selectedZipCode === []) {
+    console.log(data);
+    if (location === [] || QueryText === "" || zipCode === []) {
       toast.error("Fields must not be empty!!");
     } else {
       try {
@@ -119,7 +63,7 @@ const AddEditModal = ({
         if (res.status === 200) {
           toast.success("Query Created Successfully");
           getQueryData();
-          setShowModal(false);
+          setShowQueryModal(false);
         } else if (res.data.status !== 200) {
           toast.error("Ops! some error occurred!!");
         }
@@ -129,20 +73,33 @@ const AddEditModal = ({
     }
   };
 
-  // const handleMultiSelectChange = (selectedList) => {
-  //   console.log(selectedList);
-  //   setLocation(selectedList);
 
-  // };
+
   const EditQuery = async () => {
+     let loc = [];
+    location.map((item) => {
+      console.log(item)
+      loc.push(item.label);
+    });
+    // console.log(zipCode)
+    let zip = [];
+    zipCode.map((item) => {
+      console.log(item)
+      zip.push(item.value);
+    });
+    let data = {
+      query: QueryText,
+      location: loc,
+      zipcodes:zip,
+    };
+    console.log(data)
     try {
-      const res = await TotalServices.editQuery({
-        zipcode: zipcode,
-      });
-      if (res.data.status === 200) {
+      const res = await TotalServices.editQuery(editQueryId, data);
+      console.log(res)
+      if (res.status === 200) {
         toast.success("Zip Code Edited Successfully");
         getQueryData();
-        setShowModal(false);
+        setShowQueryModal(false);
       } else if (res.data.status !== 200) {
         document.getElementById("error").style.display = "block";
       }
@@ -150,14 +107,7 @@ const AddEditModal = ({
       console.log("error ", error);
     }
   };
-  // useEffect(() => {
-  //   if (editQueryData) {
-  //     setPlanName(editQueryData.name);
-  //     setDescription(editQueryData.description);
-  //     setStatus(editQueryData.status);
-  //     // setEmail(editData.email);
-  //   }
-  // }, [editQueryData]);
+
   return (
     <>
       {/* {showModal ? ( */}
@@ -185,162 +135,6 @@ const AddEditModal = ({
                   </span>
                 </button>
               </div>
-              {/*body*/}
-              {/* <div className="relative p-6 flex-auto">
-                <p
-                  className="text-gray-500 whitespace-no-wrap text-sm  mt-3 mb-1 text-start"
-                  style={{
-                    textAlign: "start",
-                  }}
-                >
-                  Plan Name <span className="text-red-900">*</span>
-                </p>
-                <input
-                  type="text"
-                  className="w-full rounded-md border p-3"
-                  placeholder={
-                    isEditQuery === true ? "Plan Name Edit" : "Plan Name"
-                  }
-                  value={planName}
-                  required
-                  onChange={(e) => setPlanName(e.target.value)}
-                />
-                <p
-                  className="text-gray-500 whitespace-no-wrap text-sm  mt-3 mb-1 text-start"
-                  style={{
-                    textAlign: "start",
-                  }}
-                >
-                  Description <span className="text-red-900">*</span>
-                </p>
-                <input
-                  type="text"
-                  className="w-full rounded-md border p-3"
-                  placeholder={
-                    isEditQuery === true
-                      ? "Description Edit"
-                      : "Add Description"
-                  }
-                  value={description}
-                  required
-                  // disabled={editData.edit}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-
-                <p
-                  className="text-gray-500 whitespace-no-wrap text-sm  mt-3 mb-1 text-start"
-                  style={{
-                    textAlign: "start",
-                  }}
-                >
-                  Queries Available <span className="text-red-900">*</span>
-                </p>
-                <input
-                  type="number"
-                  className="w-full rounded-md border p-3"
-                  placeholder={
-                    isEditQuery === true ? "Queries Edit" : "Add Queries"
-                  }
-                  value={queries}
-                  required
-                  // disabled={editData.edit}
-                  onChange={(e) => setQueries(e.target.value)}
-                />
-
-                <p
-                  className="text-gray-500 whitespace-no-wrap text-sm  mt-3 mb-1 text-start"
-                  style={{
-                    textAlign: "start",
-                  }}
-                >
-                  Subscription Days <span className="text-red-900">*</span>
-                </p>
-                <input
-                  type="number"
-                  className="w-full rounded-md border p-3"
-                  placeholder={
-                    isEditQuery === true
-                      ? "Edit Subscription Days"
-                      : "Add Subscription Days"
-                  }
-                  value={subscriptionDays}
-                  required
-                  // disabled={editData.edit}
-                  onChange={(e) => setSubscriptionDays(e.target.value)}
-                />
-                <>
-                  {isEditQuery === true ? (
-                    true
-                  ) : (
-                    <>
-                      <p
-                        className="text-gray-500 whitespace-no-wrap text-sm  mt-3 mb-1 text-start"
-                        style={{
-                          textAlign: "start",
-                        }}
-                      >
-                        Yearly Discount <span className="text-red-900">*</span>
-                      </p>
-                      <input
-                        type="number"
-                        className="w-full rounded-md border p-3"
-                        placeholder={
-                          isEditQuery === true
-                            ? "Edit Yearly Discount"
-                            : "Add Yearly Discount"
-                        }
-                        // value={yearlyDiscount}
-                        // required
-                        // // disabled={editData.edit}
-                        // onChange={(e) => setYearlyDiscount(e.target.value)}
-                      />
-                    </>
-                  )}
-                </>
-
-                <p
-                  className="text-gray-500 whitespace-no-wrap text-sm  mt-3 mb-1 text-start"
-                  style={{
-                    textAlign: "start",
-                  }}
-                >
-                  Price <span className="text-red-900">*</span>
-                </p>
-                <input
-                  type="number"
-                  className="w-full rounded-md border p-3"
-                  placeholder={
-                    isEditQuery === true ? "Edit Price" : "Add Price"
-                  }
-                  value={price}
-                  required
-                  // disabled={editData.edit}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-
-                <p
-                  className="text-gray-500 whitespace-no-wrap text-sm  mt-3 mb-1 text-start"
-                  style={{
-                    textAlign: "start",
-                  }}
-                >
-                  Status <span className="text-red-900">*</span>
-                </p>
-                <select
-                  id="status"
-                  defaultValue={isEditQuery === true ? status : "default"}
-                  value={status}
-                  className="w-full rounded-md border p-3"
-                  onClick={(e) => setStatus(e.target.value)}
-                >
-                  <option value="default" disabled>
-                    Select Status
-                  </option>
-                  <option value="1">Active</option>
-                  <option value="0">InActive</option>
-                </select>
-              </div> */}
-
               <div className="relative p-6 flex flex-col text-left ">
                 <div>
                   <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
@@ -362,10 +156,12 @@ const AddEditModal = ({
                     Location <span className="text-red-900">*</span>
                   </p>
                   <Select
-                    // value={locations}
-                    options={locations}
+                    value={location}
+                    options={Locations}
                     isMulti
-                    onChange={setLocation}
+                    onChange={(selectedOptions) => {
+                       console.log(selectedOptions)
+                      setLocation(selectedOptions)}}
                     defaultValue={location}
                     className="text-black basic-multi-select"
                   />
@@ -375,17 +171,20 @@ const AddEditModal = ({
                   <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
                     ZipCodes <span className="text-red-900">*</span>
                   </p>
-                  <Select
-                    defaultValue={selectedZipCode}
+                  <CreatableSelect
+                    defaultValue={zipCode}
                     isMulti
-                    onChange={setSelectedZipCode}
-                    options={zipcode}
-                    // value={selectedZipcode}
+                    onChange={(selectedOptions) => {
+                      console.log(selectedOptions)
+                      setZipCode(selectedOptions)}}
+                    // onCreateOption={handleCreateOption}
+                    options={zipcodeList}
+                    value={zipCode}
                     className="text-black basic-multi-select"
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
                     Add NEW ZIPCODE <span className="text-red-900">*</span>
                   </p>
@@ -398,7 +197,7 @@ const AddEditModal = ({
                     value={newZipCode}
                     onChange={(e) => setNewZipCode(e.target.value)}
                   />
-                </div>
+                </div> */}
               </div>
               {/*footer*/}
 

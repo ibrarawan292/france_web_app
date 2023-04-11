@@ -15,7 +15,7 @@ const CreateQuery = () => {
   const [showZipModal, setShowZipModal] = useState(false);
   const [editZippedData, setEditZippedData] = useState([]);
   const [isEditZipped, setIsEditZipped] = useState(false);
- const [editId, setEditId] = useState([]);
+  const [editId, setEditId] = useState([]);
   const [zipData, setZipData] = useState("");
   // const [category, setCategory] = useState("");
   // const [country, setCountry] = useState("");
@@ -48,7 +48,7 @@ const CreateQuery = () => {
         setZipData(res.data.zipcodes);
         setTotalPages(res.data.pages);
         if (searchTerm === "") {
-          // setTempData(res);
+          setCurrentPage(1);
         }
         setTotalRecords(res.data.total_records);
         // setTempData(res);
@@ -72,15 +72,16 @@ const CreateQuery = () => {
     setEditZippedData(null);
   };
 
-  const handleShowEditModal = (data , id) => {
+  const handleShowEditModal = (data, id) => {
     console.log(data, id);
     setShowZipModal(true);
     setEditZippedData(data);
-    setEditId(id)
+    setEditId(id);
     setIsEditZipped(true);
   };
 
   const handleSearch = (value) => {
+    console.log(value);
     setSearchTerm(value);
   };
   return (

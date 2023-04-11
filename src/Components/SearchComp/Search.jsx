@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const Search = ({ onSearch }) => {
+const Search = ({ onSearch, getQueries }) => {
   const [searchValue, setSearchValue] = useState("");
 
+  useEffect(() => {
+    if(searchValue === ""){
+      getQueries();
+    }
+  },[searchValue])
+
+  
   const handleSearch = () => {
     onSearch(searchValue);
   };
+
   return (
     <div>
       <form

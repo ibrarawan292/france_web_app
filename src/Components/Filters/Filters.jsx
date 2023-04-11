@@ -1,11 +1,12 @@
-import React from 'react'
-
-const Filters = ({ label, options, value, onChange }) => {
-  console.log(options)
+import React from "react";
+import { FaFilter } from "react-icons/fa";
+import Select from "react-select";
+const Filters = ({ label, options, value, onChange, onClick }) => {
+  console.log(value, "value")
   return (
     <>
-    {/* <label className="mr-2">{label}:</label> */}
-    <select
+      {/* <label className="mr-2">{label}:</label> */}
+      {/* <select
       onChange={onChange}
       value={value}
       // defaultValue={"options"}
@@ -15,15 +16,24 @@ const Filters = ({ label, options, value, onChange }) => {
         borderRadius: "8px",
       }}
     >
-      <option value="">Select {label}</option>
-      {options && options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
+      <option >Select {label}</option>
+      {options && options.map((option) => (
+        <option  value={option.value}>
+          {option.label}
         </option>
       ))}
-    </select>
-  </>
-  )
-}
+    </select> */}
+      <Select
+        // value={value}
+        options={options}
+        isMulti
+        onChange={onChange}
+        // defaultValue={value}
+        className="text-black basic-multi-select"
+      />
+      {/* <FaFilter onClick={onClick} /> */}
+    </>
+  );
+};
 
-export default Filters
+export default Filters;

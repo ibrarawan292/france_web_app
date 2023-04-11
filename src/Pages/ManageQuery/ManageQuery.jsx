@@ -18,12 +18,14 @@ const ManageQuery = () => {
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [editQueryData, setEditQueryData] = useState([]);
   const [isEditQuery, setIsEditQuery] = useState(false);
-
-  const [zipcode, setZipcode] = useState("");
-  const [category, setCategory] = useState("");
-  const [country, setCountry] = useState("");
-
-  const [data, setData] = useState("")
+  const [editQueryId, setEditQueryId] = useState("");
+  // const [zipcode, setZipcode] = useState("");
+  const [zipcodeList, setZipCodeList] = useState([]);
+  // const [category, setCategory] = useState("");
+  // const [country, setCountry] = useState("");
+  const [zipcodeFilter, setZipCodeFilter] = useState([]);
+  const [locationFilter, setLocationFilter] = useState([]);
+  const [data, setData] = useState("");
   // Pagination
   const [totalRecords, setTotalRecords] = useState("");
   const [record, setRecord] = useState(0);
@@ -33,17 +35,49 @@ const ManageQuery = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [tempData, setTempData] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
- const getQueries = async (str) => { 
+
+  const Locations = [
+    { label: "USA", value: "USA"},
+    { label: "CANADA", value: "CANADA" },
+    { label: "FRANCE", value: "FRANCE" },
+    { label: "AMERICA", value: "AMERICA" },
+  ];
+
+  const handleZipcodeChange = (selectedOption) => {
+    console.log(selectedOption)
+    let zipArr = []
+    selectedOption.map((item) => {
+      zipArr.push(item.value)
+    }) ;
+    setZipCodeFilter(zipArr);
+   
+  };
+
+  const handleLocationChange = (selectedOption) => {
+    console.log(selectedOption)
+    let locArr = []
+    selectedOption.map((item) => {
+      return (
+      locArr.push(item.value)
+      )
+    });
+    setLocationFilter(locArr);
+  };
+
+  const getQueries = async () => {
     setLoader(true);
+    console.log(locationFilter, zipcodeFilter)
     try {
       const res = await TotalServices.getQueriesList(
         NumberOfRecordsPerPage,
         (currentPage - 1) * NumberOfRecordsPerPage,
         {
           query: searchTerm,
+          location: locationFilter,
+          zipcodes: zipcodeFilter
         }
       );
-        console.log(res.data)
+      console.log(res.data);
       if (res.data.status === 200) {
         if (res.data.pages === 1) {
           setCurrentPage(1);
@@ -52,7 +86,7 @@ const ManageQuery = () => {
         setData(res.data.user_queries);
         setTotalPages(res.data.pages);
         if (searchTerm === "") {
-          setTempData(res);
+          setCurrentPage(1)
         }
         setTotalRecords(res.data.total_records);
       } else if (res.data.status !== 200) {
@@ -65,123 +99,96 @@ const ManageQuery = () => {
 
   useEffect(() => {
     getQueries();
-  }, [ searchTerm, currentPage]);
+  }, [searchTerm, currentPage, locationFilter, zipcodeFilter]);
 
-  // ADD Query API STARTS
-  // const CreateQuery = async () => {
-  //   console.log(Category.label);
+  const getZipCodeList = async () => {
+    setLoader(true);
+    console.log(searchTerm);
+    try {
+      const res = await TotalServices.getZipCode(
+        NumberOfRecordsPerPage,
+        (currentPage - 1) * NumberOfRecordsPerPage,
+        {
+          keyword: searchTerm,
+        }
+      );
+      console.log(res, "res");
+      if (res.data.status === 200) {
+        if (res.data.pages === 1) {
+          setCurrentPage(1);
+        }
+        setLoader(false);
+        setZipCodeList(res.data.zipcodes);
+        setTotalPages(res.data.pages);
+        if (searchTerm === "") {
+          setCurrentPage(1)
+        }
+        setTotalRecords(res.data.total_records);
+        // setTempData(res);
+        // setTempDataValue(res.data.plans);
+        setLoader(false);
+      } else if (res.data.status !== 200) {
+        document.getElementById("error").style.display = "block";
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
 
-  //   console.log(QueryText);
+  useEffect(() => {
+    getZipCodeList();
+  }, [searchTerm, currentPage, locationFilter, zipcodeFilter]);
+ 
 
-  //   let data = {
-  //     url: QueryText,
-  //     category: Category.label,
-  //     region: Region.label,
-  //   };
+  const ExportCSVAll = async () => {
+    try {
+      const res = await TotalServices.downloadAllQuery();
+      if (res.status === 200) {
+        var a = document.createElement("a");
 
-  //   if (Category === [] || QueryText === "" || Region === []) {
-  //     toast.error("Fields must not be empty!!");
-  //   } else {
-  //     try {
-  //       const res = await TotalServices.CreateUserQuery(data);
-  //       console.log(res);
-  //       if (res.status === 200) {
-  //         toast.success("Query Created Successfully");
-  //         getQueries();
-  //         setShowModal(false);
-  //       } else if (res.data.status !== 200) {
-  //         toast.error("Ops! some error occurred!!");
-  //       }
-  //     } catch (error) {
-  //       console.log("error ", error);
-  //     }
-  //   }
-  // };
-  // ADD Query API ENDS
+        var binaryData = [];
+        binaryData.push(res.data);
+        a.href = window.URL.createObjectURL(
+          new Blob(binaryData, { type: "text/csv" })
+        );
+        a.download = "All Queries";
+        a.click();
+      } else if (res.data.status !== 200) {
+        document.getElementById("error").style.display = "block";
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
 
-  // DELETE QUERY API STARTS
-  // const UserDeleteQuery = async (id) => {
-  //   try {
-  //     const res = await TotalServices.UserDeleteQuery(id);
-  //     console.log(res);
-  //     if (res.status === 200) {
-  //       toast.success("Query Deleted Successfully");
-  //       getQueries();
-  //     } else if (res.data.status !== 200) {
-  //       toast.error("Ops! some error occurred!!");
-  //     }
-  //   } catch (error) {
-  //     console.log("error ", error);
-  //   }
-  // };
+  const ExportCSV = async (queryid) => {
+    console.log(queryid)
+    try {
+      const res = await TotalServices.downloadQuery(queryid);
+      console.log(res)
+      if (res.status === 200) {
+        var a = document.createElement("a");
 
-  // DELETE QUERY API ENDS
-
-  // const ExportCSVAll = async () => {
-  //   try {
-  //     const res = await TotalServices.DownloadAllQueries();
-  //     if (res.status === 200) {
-  //       var a = document.createElement("a");
-
-  //       var binaryData = [];
-  //       binaryData.push(res.data);
-  //       a.href = window.URL.createObjectURL(
-  //         new Blob(binaryData, { type: "text/csv" })
-  //       );
-  //       a.download = "All Queries";
-  //       a.click();
-  //     } else if (res.data.status !== 200) {
-  //       document.getElementById("error").style.display = "block";
-  //     }
-  //   } catch (error) {
-  //     console.log("error ", error);
-  //   }
-  // };
-
-  // const ExportCSV = async (queryid) => {
-  //   try {
-  //     const res = await TotalServices.DownloadQuery(queryid);
-  //     if (res.status === 200) {
-  //       var a = document.createElement("a");
-
-  //       var binaryData = [];
-  //       binaryData.push(res.data);
-  //       a.href = window.URL.createObjectURL(
-  //         new Blob(binaryData, { type: "text/csv" })
-  //       );
-  //       a.download = "Single Query";
-  //       a.click();
-  //     } else if (res.data.status !== 200) {
-  //       document.getElementById("error").style.display = "block";
-  //     }
-  //   } catch (error) {
-  //     console.log("error ", error);
-  //   }
-  // };
+        var binaryData = [];
+        binaryData.push(res.data);
+        a.href = window.URL.createObjectURL(
+          new Blob(binaryData, { type: "text/csv" })
+        );
+        a.download = "Single Query";
+        a.click();
+      } else if (res.data.status !== 200) {
+        document.getElementById("error").style.display = "block";
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
 
   // useEffect(() => {
   //   setAddButton("Download All");
   // }, []);
 
-  const options = {
-    zipcodes: ["10001", "10002", "10003", "10004"],
-    categories: ["Category 1", "Category 2", "Category 3", "Category 4"],
-    countries: ["USA", "Canada", "Mexico", "France"],
-  };
 
- 
-
-  const handleZipcodeChange = (event) => {
-    setZipcode(event.target.value);
-  };
-
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
-  };
-
-  const handleCountryChange = (event) => {
-    setCountry(event.target.value);
-  };
 
   const handleShowAddQueryModal = () => {
     setShowQueryModal(true);
@@ -189,11 +196,18 @@ const ManageQuery = () => {
     setEditQueryData(null);
   };
 
-  const handleShowEditModal = (data) => {
-    console.log(data);
-    setShowQueryModal(true);
-    setEditQueryData(data);
-    setIsEditQuery(true);
+  const handleShowEditModal = async (id) => {
+    console.log(id);
+    try {
+      const res = await TotalServices.getSingleQuery(id);
+      console.log(res.data.data);
+      setShowQueryModal(true);
+      setEditQueryData(res.data.data);
+      setEditQueryId(id);
+      setIsEditQuery(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSearch = (value) => {
@@ -207,7 +221,7 @@ const ManageQuery = () => {
             <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
               <div class="flex items-center flex-1 space-x-4">
                 {/* search component--->> */}
-                <Search onSearch={handleSearch} />
+                <Search onSearch={handleSearch} getQueries={getQueries} />
               </div>
 
               <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
@@ -217,7 +231,7 @@ const ManageQuery = () => {
                   handleShowModal={handleShowAddQueryModal}
                 />
                 {/* export all button-->> */}
-                <ExportAll />
+                <ExportAll handleDownloadAll={ExportCSVAll}/>
               </div>
             </div>
 
@@ -226,22 +240,17 @@ const ManageQuery = () => {
 
               <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
                 {/* Filters--->> */}
+
                 <Filters
-                  label="Categories"
-                  options={options.categories}
-                  value={category}
-                  onChange={handleCategoryChange}
-                />
-                <Filters
-                  label="Countries"
-                  options={options.countries}
-                  value={country}
-                  onChange={handleCountryChange}
+                  label="Location"
+                  options={Locations}
+                  value={locationFilter}
+                  onChange={handleLocationChange}
                 />
                 <Filters
                   label="Zipcode"
-                  options={options.zipcodes}
-                  value={zipcode}
+                  options={zipcodeList}
+                  value={zipcodeFilter}
                   onChange={handleZipcodeChange}
                 />
               </div>
@@ -254,6 +263,7 @@ const ManageQuery = () => {
                 loader={loader}
                 setLoader={setLoader}
                 getQueryData={getQueries}
+                ExportCSV={ExportCSV}
               />
             </div>
             <nav
@@ -281,6 +291,9 @@ const ManageQuery = () => {
                 editQueryData={editQueryData}
                 isEditQuery={isEditQuery}
                 getQueryData={getQueries}
+                editQueryId={editQueryId}
+                zipcodeList={zipcodeList}
+                Locations={Locations}
               />
             ) : null}
           </div>

@@ -40,14 +40,24 @@ const deleteQuery = (id, data) => {
   return http.patch("/UserDeleteQuery/" + id, data);
 };
 
-const editQuery = (id) => {
-  console.log(id)
-  return http.post("/UserEditQuery" + id)
+const editQuery = (id, data) => {
+  console.log(id, data)
+  return http.patch("/UserEditQuery/" + id, data)
 }
 
 const getSingleQuery = (id) => {
   console.log(id)
   return http.get("/SingleQuery/" + id)
+}
+
+const downloadQuery = (id) => {
+  console.log(id)
+  return http.get("/DownloadQuery/" + id)
+}
+
+const downloadAllQuery = (id) => {
+  console.log(id)
+  return http.get("/DownloadAllQueries/" + id)
 }
 
 
@@ -65,7 +75,9 @@ const TotalServices = {
   createQuery,
   deleteQuery,
   editQuery,
-  getSingleQuery
+  getSingleQuery,
+  downloadQuery,
+  downloadAllQuery
 };
 
 export default TotalServices;

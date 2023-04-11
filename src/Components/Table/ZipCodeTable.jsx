@@ -41,18 +41,18 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
       {loader || zipData === 0 ? (
         <>
           <div className="bg-white p-10 flex justify-center">
-            <ScaleLoader color={"var(--bg-fill4)"} loading={loader} size={20} />
+            <ScaleLoader className="text-black" loading={loader} size={20} />
           </div>
         </>
       ) : (
         <>
-          {zipData && zipData.length === 0 ? (
+          {zipData.length == 0 ? (
             <>
               <>
                 <div className="text-center p-16">
                   <button
-                    style={{ background: "var(--bg-fill4)" }}
-                    className="btn-hover  py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-white"
+                    
+                    className="btn-hover bg-black py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-white"
                   >
                     No data Found
                   </button>
