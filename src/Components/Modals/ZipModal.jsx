@@ -10,15 +10,7 @@ const ZipModal = ({
   isEditZipped,
   editId,
 }) => {
-  console.log(editZippedData, editId);
-  // const {
-  //   // showZipped,
-  //   // setShowZipped,
-  //   // editZippedData,
-  //   // setEditZippedData,
-  //   isEditZipped,
-  //   // setIsEditZipped,
-  // } = useContext(ThemeContext);
+
   const [zipcode, setZipcode] = useState("");
   const [editZipId, setEditZipId] = useState("");
   // console.log(showZipped);
@@ -40,7 +32,6 @@ const ZipModal = ({
     } else {
       try {
         const res = await TotalServices.createZipCode(data);
-        console.log(res);
         if (res.status === 200) {
           toast.success("Zip Code Created Successfully");
           getZipCode();
@@ -77,16 +68,15 @@ const ZipModal = ({
   };
   return (
     <>
-      {/* {showZipModal ? ( */}
-      <ToastContainer />
+     
       <>
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-0 p-0">
           <div className="relative w-auto my-6 mx-auto max-w-full">
             <div
               className={
                 isEditZipped === true
-                  ? "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
-                  : "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
+                  ? "border-0 mt-10 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
+                  : "border-0 mt-10 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
               }
             >
               <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
@@ -154,6 +144,7 @@ const ZipModal = ({
         <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
       </>
       {/* ) : null} */}
+      <ToastContainer />
     </>
   );
 };

@@ -13,7 +13,6 @@ function Login() {
   const [forgetEmail, setForgetEmail] = useState("");
 
   // VERIFICATION
-  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [BtnDisabled, setBtnDisabled] = useState(false);
@@ -22,17 +21,15 @@ function Login() {
 
   let navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     var isLogin = localStorage.getItem("UserIsLogin");
-  //     if (isLogin === "true") {
-  //       setLoginCheck(isLogin);
-  //       navigate("/user-dashboard");
-  //     } else {
-  //       setLoginCheck("");
-  //     }
-  //     setShowModal(false);
-  //     setHeaderShow(false);
-  //   }, []);
+    useEffect(() => {
+      var isLogin = localStorage.getItem("UserIsLogin");
+      if (isLogin === "true") {
+        setLoginCheck(isLogin);
+        navigate("/");
+      } else {
+        setLoginCheck("");
+      }
+    }, []);
 
     // LOGIN API STARTS
     const handleLogin = async () => {
@@ -41,14 +38,9 @@ function Login() {
         email: email,
         password: Password,
       });
-      console.log(email, Password)
-      console.log(response, "res");
 
       if (response.status === 200) {
         setBtnDisabled(false);
-        // setShowModal(false);
-        // setHeaderShow(false);
-
         let token = {
           access_token: response.data.access_token,
           refresh_token: response.data.refresh_token,
@@ -119,7 +111,7 @@ function Login() {
 
   return (
     <>
-      {/* {loginCheck !== "true" && ( */}
+      {loginCheck !== "true" && (
         <div className="w-full h-screen flex flex-col lg:items-center lg:justify-center lg:flex-row">
           <Helmet>
             <title>France-Web-App | Login</title>
@@ -245,7 +237,7 @@ function Login() {
                     )}
                   </button>
                 </div>
-                <div className="text-center">
+                {/* <div className="text-center">
                   <a
                     onClick={() => setForgotPass(!ForgotPass)}
                     className="text-blue-400 text-xs cursor-pointer"
@@ -263,7 +255,7 @@ function Login() {
                       Sign up now
                     </a>
                   </div>
-                </div>
+                </div> */}
               </div>
             </form>
           </div>
@@ -318,7 +310,7 @@ function Login() {
             </div>
           ) : null}
         </div>
-      {/* )} */}
+      )} 
     </>
   );
 }

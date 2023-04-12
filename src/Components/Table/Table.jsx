@@ -99,7 +99,7 @@ const Table = ({
                             </td>
                             <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                             {item.location.map((loc) => {
-                                return <p>{loc.label}</p>;
+                                return <p className="w-fit bg-blue-600 text-white rounded-2xl px-4 py-1 m-1">{loc.label}</p>;
                               })}
                             </td>
                             <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
@@ -119,7 +119,7 @@ const Table = ({
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  downloadFile("70");
+                                  downloadFile(item.query_id, item.date_created);
                                 }}
                                 type="button"
                                 className="btn-hover3 rounded-md py-3  flex flex-row"

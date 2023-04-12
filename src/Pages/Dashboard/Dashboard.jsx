@@ -159,7 +159,7 @@ const Dashboard = () => {
                         toggle2();
                       }}
                       className="pl-5 py-2 rounded-md w-[90%] flex justify-between btn-hover3"
-                      to="/create-query"
+                      to="/manage-zipcode"
                     >
                       <MdCreate
                         size="1.4em"
@@ -167,7 +167,7 @@ const Dashboard = () => {
                       />
                       <div className="flex w-full">
                         <div className="text-[13px] self-center font-light cursor-pointer">
-                          Create Query
+                          Manage Zip Code
                         </div>
                       </div>
                     </NavLink>
@@ -198,9 +198,29 @@ const Dashboard = () => {
                         toggle2();
                       }}
                       className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
-                      to=""
+                      to="/manage-query"
                     >
-                      <MdDashboardCustomize
+                      <MdOutlineQueryStats
+                        size="1.4em"
+                        className="mr-3 self-center"
+                      />
+                    </NavLink>
+
+                    <NavLink
+                      end
+                      style={({ isActive }) => ({
+                        color: isActive ? "var(--txtColor2)" : "",
+                        background: isActive ? "var(--bg-fill4)" : "",
+                      })}
+                      onClick={() => {
+                        setActive(4);
+
+                        toggle2();
+                      }}
+                      className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
+                      to="/manage-zipcode"
+                    >
+                      <MdCreate
                         size="1.4em"
                         className="mr-3 self-center"
                       />
@@ -280,7 +300,7 @@ const Dashboard = () => {
                   <div className="w-full px-5 dashboard_color py-4 flex items-center justify-between">
                     <div className="closing-menu text-white w-full flex items-center justify-between">
                       <div className="flex pl-4 pr-10">
-                        <p>Testlegion</p>
+                        <p>France Web App</p>
                       </div>
                       <FiMenu
                         className="zindex-dropdown"
@@ -304,15 +324,40 @@ const Dashboard = () => {
                         toggle2();
                       }}
                       className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
-                      to=""
+                      to="/manage-query"
                     >
-                      <MdManageAccounts
+                      <MdOutlineQueryStats
                         size="2em"
                         className="mr-3 self-center"
                       />
                       <div className="flex w-full">
                         <div className="text-[20px] self-center font-light cursor-pointer">
-                          Dashboard
+                          Manage Query
+                        </div>
+                      </div>
+                    </NavLink>
+
+                    <NavLink
+                      end
+                      style={({ isActive }) => ({
+                        color: isActive ? "var(--txtColor2)" : "black",
+                        background: isActive ? "var(--bg-fill4)" : "",
+                      })}
+                      onClick={() => {
+                        setActive(4);
+                        setShowMenu(false);
+                        toggle2();
+                      }}
+                      className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
+                      to="/manage-zipcode"
+                    >
+                      <MdCreate
+                        size="2em"
+                        className="mr-3 self-center"
+                      />
+                      <div className="flex w-full">
+                        <div className="text-[20px] self-center font-light cursor-pointer">
+                          Manage Zip Code
                         </div>
                       </div>
                     </NavLink>

@@ -51,7 +51,7 @@ const AddEditModal = ({
       zipcodes: zip,
     };
     console.log(data);
-    if (location == [] || QueryText === "" || zipCode == []) {
+    if (QueryText === "" || loc == "" || zip == "") {
       toast.error("Fields must not be empty!!");
     } else {
       try {
@@ -88,7 +88,7 @@ const AddEditModal = ({
       zipcodes: zip,
     };
     console.log(data);
-    if (location == [] || QueryText === "" || zipCode == []) {
+    if (loc == "" || QueryText === "" || zipCode == "") {
       toast.error("Fields must not be empty!!");
     } else {
       try {
@@ -117,8 +117,8 @@ const AddEditModal = ({
             <div
               className={
                 isEditQuery === true
-                  ? "border-0 mt-40 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
-                  : "border-0 mt-64 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
+                  ? "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
+                  : "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
               }
             >
               <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">

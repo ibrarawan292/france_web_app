@@ -1,12 +1,15 @@
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ApiURL from "./Config/Config";
 
 const API = axios.create({
-  baseURL: "http://149.28.215.39:7025",
+  baseURL: ApiURL,
   headers: {
     "Content-type": " application/json",
   },
 });
+
 
 // request interceptor for settting the two headers refresh & access tokens
 API.interceptors.request.use(
@@ -45,7 +48,6 @@ API.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error, " Original Request");
     const originalRequest = error.config;
     // if (error.response.status === 400) {
     //   console.log(error.response.data.message);
@@ -55,6 +57,13 @@ API.interceptors.response.use(
     }
     if (error.response.status === 500) {
       toast.error("Oops! Something went wrong");
+    }
+    if(error.response.status === 401){
+      // toast.error("You don't have permission to view this page");
+      localStorage.removeItem("UserAuth")
+      localStorage.setItem("UserIsLogin", false);
+      window.location.reload();
+      Navigate("/login");
     }
     if (error.response.status === 403) {
       return API.get("/RefreshToken").then((res) => {

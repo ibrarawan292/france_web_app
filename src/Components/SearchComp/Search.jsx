@@ -3,7 +3,6 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Search = ({ onSearch, getData, validationType, placeholder }) => {
   const [searchValue, setSearchValue] = useState("");
-  console.log(validationType);
 
   function handleInputChange(event) {
     const enteredValue = event.target.value.trim();
@@ -11,18 +10,19 @@ const Search = ({ onSearch, getData, validationType, placeholder }) => {
 
     if (validationType === "string") {
       isValidInput = /^[a-zA-Z]+$/.test(enteredValue);
-      setSearchValue(enteredValue)
+
+      setSearchValue(enteredValue);
     } else if (validationType === "number") {
       isValidInput = /^\d+$/.test(enteredValue);
-      setSearchValue(enteredValue)
+      setSearchValue(enteredValue);
     }
-
-    // if (!isValidInput) {
-    //   setSearchValue("");
-    //   toast.warning(`Please enter a valid ${validationType}`);
-    //   getData()
-    // } 
   }
+
+  useEffect(() => {
+    if (searchValue === "") {
+      getData();
+    }
+  }, [searchValue]);
 
   const handleSearch = () => {
     onSearch(searchValue);

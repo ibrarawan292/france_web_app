@@ -12,7 +12,6 @@ const ProtectedRoutes = () => {
     );
     useEffect(() => {
       var isLogin = localStorage.getItem("UserIsLogin");
-      console.log(AdminIsLogin);
       if (isLogin === "true") {
         navigate("/manage-query");
       } else {

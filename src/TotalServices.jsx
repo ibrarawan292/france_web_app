@@ -2,25 +2,23 @@ import http from "./axios";
 
 
 const login = (data) => {
-  console.log(data)
   return http.post("/Login", data);
 };
 
 const logout = (data) => {
-  console.log(data)
   return http.post("/Logout", data);
 };
 const getZipCode = (limit, offset, data) => {
-  console.log(data)
   return http.post("/ListZipcodes/" + limit + "/" + offset, data)
 }
+const getZipCodes = () => {
+  return http.get("/GetZipcodes" )
+}
 const createZipCode = ( data) => {
-  console.log(data)
   return http.post("/CreateZipcode", data)
 }
 
 const editZipCode = (id,data) => {
-  console.log(data)
   return http.patch("/EditZipcode/"+ id ,data)
 }
 
@@ -32,7 +30,6 @@ const getQueriesList = (limit, offset, data) => {
   return http.post("/ListQueries/" + limit + "/" + offset, data);
 };
 const createQuery = (data) => {
-  console.log(data)
   return http.post("/CreateUserQuery", data);
 };
 
@@ -41,23 +38,19 @@ const deleteQuery = (id, data) => {
 };
 
 const editQuery = (id, data) => {
-  console.log(id, data)
   return http.patch("/UserEditQuery/" + id, data)
 }
 
 const getSingleQuery = (id) => {
-  console.log(id)
   return http.get("/SingleQuery/" + id)
 }
 
 const downloadQuery = (id) => {
-  console.log(id)
   return http.get("/DownloadQuery/" + id)
 }
 
-const downloadAllQuery = (id) => {
-  console.log(id)
-  return http.get("/DownloadAllQueries/" + id)
+const downloadAllQuery = () => {
+  return http.get("/DownloadAllQueries")
 }
 
 
@@ -68,6 +61,7 @@ const TotalServices = {
   login,
   logout,
   getZipCode,
+  getZipCodes,
   createZipCode,
   editZipCode,
   deleteZipCode,

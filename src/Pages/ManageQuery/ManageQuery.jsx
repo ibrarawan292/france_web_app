@@ -27,9 +27,10 @@ const ManageQuery = () => {
   const [locationFilter, setLocationFilter] = useState([]);
   const [data, setData] = useState("");
   // Pagination
+  const [filterSelected, setFilterSelected] = useState(3);
   const [totalRecords, setTotalRecords] = useState("");
   const [record, setRecord] = useState(0);
-  const [NumberOfRecordsPerPage] = useState(5);
+  const [NumberOfRecordsPerPage] = useState(filterSelected);
   const [currentPage, setCurrentPage] = useState(1);
   const [goto, setGoto] = useState("");
   const [totalPages, setTotalPages] = useState(1);
@@ -68,7 +69,6 @@ const ManageQuery = () => {
  
   const getQueries = async () => {
     setLoader(true);
-    console.log(searchTerm, locationFilter, zipcodeFilter)
     try {
       const res = await TotalServices.getQueriesList(
         NumberOfRecordsPerPage,
@@ -79,7 +79,6 @@ const ManageQuery = () => {
           zipcodes: zipcodeFilter,
         }
       );
-      console.log(res.data);
       if (res.data.status === 200) {
         if (res.data.pages === 1) {
           setCurrentPage(1);
@@ -87,10 +86,8 @@ const ManageQuery = () => {
         setLoader(false);
         setData(res.data.user_queries);
         setTotalPages(res.data.pages);
-        if (searchTerm === "") {
-          setCurrentPage(1)
-        }
         setTotalRecords(res.data.total_records);
+        setTempData(res);
       } else if (res.data.status !== 200) {
         document.getElementById("error").style.display = "block";
       }
@@ -106,27 +103,14 @@ const ManageQuery = () => {
   const getZipCodeList = async () => {
     setLoader(true);
     try {
-      const res = await TotalServices.getZipCode(
-        NumberOfRecordsPerPage,
-        (currentPage - 1) * NumberOfRecordsPerPage,
-        {
-          keyword: "",
-        }
-      );
-      console.log(res, "res");
+      const res = await TotalServices.getZipCodes();
+      console.log(res, "reponse")
       if (res.data.status === 200) {
         if (res.data.pages === 1) {
           setCurrentPage(1);
         }
         setLoader(false);
         setZipCodeList(res.data.zipcodes);
-        setTotalPages(res.data.pages);
-        if (searchTerm === "") {
-          setCurrentPage(1)
-        }
-        setTotalRecords(res.data.total_records);
-        // setTempData(res);
-        // setTempDataValue(res.data.plans);
         setLoader(false);
       } else if (res.data.status !== 200) {
         document.getElementById("error").style.display = "block";
@@ -138,7 +122,7 @@ const ManageQuery = () => {
 
   useEffect(() => {
     getZipCodeList();
-  }, [currentPage]);
+  }, []);
  
 
   const handleShowAddQueryModal = () => {
@@ -148,10 +132,8 @@ const ManageQuery = () => {
   };
 
   const handleShowEditModal = async (id) => {
-    console.log(id);
     try {
       const res = await TotalServices.getSingleQuery(id);
-      console.log(res.data.data);
       setShowQueryModal(true);
       setEditQueryData(res.data.data);
       setEditQueryId(id);
@@ -182,7 +164,7 @@ const ManageQuery = () => {
                   handleShowModal={handleShowAddQueryModal}
                 />
                 {/* export all button-->> */}
-                <ExportAll queryData={data}/>
+                <ExportAll />
               </div>
             </div>
 
@@ -227,7 +209,7 @@ const ManageQuery = () => {
                   totalRecords={totalRecords}
                   setRecord={setRecord}
                   record={record}
-                  NumberOfRecordsPerPage={NumberOfRecordsPerPage}
+                  NumberOfRecordsPerPage={filterSelected}
                   setCurrentPage={setCurrentPage}
                   currentPage={currentPage}
                   setGoto={setGoto}
