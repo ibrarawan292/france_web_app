@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const API = axios.create({
-  baseURL: "http://127.0.0.1:5000",
+  baseURL: "http://149.28.215.39:7025",
   headers: {
     "Content-type": " application/json",
   },
@@ -52,6 +52,9 @@ API.interceptors.response.use(
     // }
     if (error.response.status !== 403) {
       toast.error(error.response.data.message);
+    }
+    if (error.response.status === 500) {
+      toast.error("Oops! Something went wrong");
     }
     if (error.response.status === 403) {
       return API.get("/RefreshToken").then((res) => {

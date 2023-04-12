@@ -8,9 +8,9 @@ const ZipModal = ({
   setShowZipModal,
   editZippedData,
   isEditZipped,
-  editId
+  editId,
 }) => {
-  console.log(editZippedData,editId);
+  console.log(editZippedData, editId);
   // const {
   //   // showZipped,
   //   // setShowZipped,
@@ -20,40 +20,22 @@ const ZipModal = ({
   //   // setIsEditZipped,
   // } = useContext(ThemeContext);
   const [zipcode, setZipcode] = useState("");
-  const [editZipId, setEditZipId] = useState("")
+  const [editZipId, setEditZipId] = useState("");
   // console.log(showZipped);
 
   useEffect(() => {
     if (editZippedData) {
       setZipcode(editZippedData.label);
-      setEditZipId(editId)
+      setEditZipId(editId);
     }
   }, [editZippedData]);
-
-  const handleEditZipCode = async () => {
-    let data = {
-      zipcode: zipcode,
-    };
-    try {
-      const res = await TotalServices.editZipCode(editZipId, data);
-      if (res.data.status === 200) {
-        toast.success("Zip Code Edited Successfully");
-        getZipCode();
-        setShowZipModal(false);
-      } else if (res.data.status !== 200) {
-        document.getElementById("error").style.display = "block";
-      }
-    } catch (error) {
-      console.log("error ", error);
-    }
-  };
 
   const handleAddZipCode = async () => {
     let data = {
       zipcode: zipcode,
     };
 
-    if (zipcode === []) {
+    if (zipcode == []) {
       toast.error("Fields must not be empty!!");
     } else {
       try {
@@ -65,6 +47,28 @@ const ZipModal = ({
           setShowZipModal(false);
         } else if (res.data.status !== 200) {
           toast.error("Ops! some error occurred!!");
+        }
+      } catch (error) {
+        console.log("error ", error);
+      }
+    }
+  };
+
+  const handleEditZipCode = async () => {
+    let data = {
+      zipcode: zipcode,
+    };
+    if (zipcode == []) {
+      toast.error("Fields must not be empty!!");
+    } else {
+      try {
+        const res = await TotalServices.editZipCode(editZipId, data);
+        if (res.data.status === 200) {
+          toast.success("Zip Code Edited Successfully");
+          getZipCode();
+          setShowZipModal(false);
+        } else if (res.data.status !== 200) {
+          document.getElementById("error").style.display = "block";
         }
       } catch (error) {
         console.log("error ", error);

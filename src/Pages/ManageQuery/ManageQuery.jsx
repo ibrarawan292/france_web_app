@@ -64,9 +64,11 @@ const ManageQuery = () => {
     setLocationFilter(locArr);
   };
 
+
+ 
   const getQueries = async () => {
     setLoader(true);
-    console.log(locationFilter, zipcodeFilter)
+    console.log(searchTerm, locationFilter, zipcodeFilter)
     try {
       const res = await TotalServices.getQueriesList(
         NumberOfRecordsPerPage,
@@ -74,7 +76,7 @@ const ManageQuery = () => {
         {
           query: searchTerm,
           location: locationFilter,
-          zipcodes: zipcodeFilter
+          zipcodes: zipcodeFilter,
         }
       );
       console.log(res.data);
@@ -103,13 +105,12 @@ const ManageQuery = () => {
 
   const getZipCodeList = async () => {
     setLoader(true);
-    console.log(searchTerm);
     try {
       const res = await TotalServices.getZipCode(
         NumberOfRecordsPerPage,
         (currentPage - 1) * NumberOfRecordsPerPage,
         {
-          keyword: searchTerm,
+          keyword: "",
         }
       );
       console.log(res, "res");
@@ -137,58 +138,8 @@ const ManageQuery = () => {
 
   useEffect(() => {
     getZipCodeList();
-  }, [searchTerm, currentPage, locationFilter, zipcodeFilter]);
+  }, [currentPage]);
  
-
-  const ExportCSVAll = async () => {
-    try {
-      const res = await TotalServices.downloadAllQuery();
-      if (res.status === 200) {
-        var a = document.createElement("a");
-
-        var binaryData = [];
-        binaryData.push(res.data);
-        a.href = window.URL.createObjectURL(
-          new Blob(binaryData, { type: "text/csv" })
-        );
-        a.download = "All Queries";
-        a.click();
-      } else if (res.data.status !== 200) {
-        document.getElementById("error").style.display = "block";
-      }
-    } catch (error) {
-      console.log("error ", error);
-    }
-  };
-
-  const ExportCSV = async (queryid) => {
-    console.log(queryid)
-    try {
-      const res = await TotalServices.downloadQuery(queryid);
-      console.log(res)
-      if (res.status === 200) {
-        var a = document.createElement("a");
-
-        var binaryData = [];
-        binaryData.push(res.data);
-        a.href = window.URL.createObjectURL(
-          new Blob(binaryData, { type: "text/csv" })
-        );
-        a.download = "Single Query";
-        a.click();
-      } else if (res.data.status !== 200) {
-        document.getElementById("error").style.display = "block";
-      }
-    } catch (error) {
-      console.log("error ", error);
-    }
-  };
-
-  // useEffect(() => {
-  //   setAddButton("Download All");
-  // }, []);
-
-
 
   const handleShowAddQueryModal = () => {
     setShowQueryModal(true);
@@ -221,7 +172,7 @@ const ManageQuery = () => {
             <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
               <div class="flex items-center flex-1 space-x-4">
                 {/* search component--->> */}
-                <Search onSearch={handleSearch} getQueries={getQueries} />
+                <Search onSearch={handleSearch} getData={getQueries} validationType={"string"} placeholder={"Query Name"} />
               </div>
 
               <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
@@ -231,7 +182,7 @@ const ManageQuery = () => {
                   handleShowModal={handleShowAddQueryModal}
                 />
                 {/* export all button-->> */}
-                <ExportAll handleDownloadAll={ExportCSVAll}/>
+                <ExportAll queryData={data}/>
               </div>
             </div>
 
@@ -263,7 +214,7 @@ const ManageQuery = () => {
                 loader={loader}
                 setLoader={setLoader}
                 getQueryData={getQueries}
-                ExportCSV={ExportCSV}
+                // ExportCSV={ExportCSV}
               />
             </div>
             <nav

@@ -1,23 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
-const Search = ({ onSearch, getQueries }) => {
+const Search = ({ onSearch, getData, validationType, placeholder }) => {
   const [searchValue, setSearchValue] = useState("");
+  console.log(validationType);
 
-  useEffect(() => {
-    if(searchValue === ""){
-      getQueries();
+  function handleInputChange(event) {
+    const enteredValue = event.target.value.trim();
+    let isValidInput = true;
+
+    if (validationType === "string") {
+      isValidInput = /^[a-zA-Z]+$/.test(enteredValue);
+      setSearchValue(enteredValue)
+    } else if (validationType === "number") {
+      isValidInput = /^\d+$/.test(enteredValue);
+      setSearchValue(enteredValue)
     }
-  },[searchValue])
 
-  
+    // if (!isValidInput) {
+    //   setSearchValue("");
+    //   toast.warning(`Please enter a valid ${validationType}`);
+    //   getData()
+    // } 
+  }
+
   const handleSearch = () => {
     onSearch(searchValue);
   };
 
   return (
     <div>
+      {/* <ToastContainer/> */}
       <form
+        type="submit"
         class="flex items-center"
         onSubmit={(e) => {
           e.preventDefault();
@@ -46,8 +61,8 @@ const Search = ({ onSearch, getQueries }) => {
             className="border-2 border-black text-black rounded-lg focus:border-black block w-full pl-10 p-1  dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500 "
             required=""
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder={`Search `}
+            onChange={handleInputChange}
+            placeholder={`Search ${placeholder}`}
           />
         </div>
       </form>

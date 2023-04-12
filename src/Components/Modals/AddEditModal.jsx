@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 // import { useStateContext } from "../../contexts/ContextProvider";
 // import { ThemeContext } from "../../App";
-import CreatableSelect from 'react-select/creatable';
+import CreatableSelect from "react-select/creatable";
 import TotalServices from "../../TotalServices";
 import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +12,7 @@ const AddEditModal = ({
   isEditQuery,
   editQueryId,
   zipcodeList,
-  Locations
+  Locations,
 }) => {
   const [QueryText, setQueryText] = useState("");
   const [newZipCode, setNewZipCode] = useState("");
@@ -22,19 +22,16 @@ const AddEditModal = ({
   // const [selectedLocation, setSelectedLocation] = useState([]);
 
   useEffect(() => {
-    if(editQueryData) {
+    if (editQueryData) {
       setQueryText(editQueryData.query_name);
       setLocation(editQueryData.location);
-      setZipCode(editQueryData.zipcode_data)
+      setZipCode(editQueryData.zipcode_data);
     }
-  },[editQueryData])
-
+  }, [editQueryData]);
 
   // const handleZipCodeChange = (selectedOptions) => {
   //   setZipCode(selectedOptions);
   // };
-
-
 
   // console.log(editData)
 
@@ -51,10 +48,10 @@ const AddEditModal = ({
     let data = {
       query: QueryText,
       location: loc,
-      zipcodes:zip,
+      zipcodes: zip,
     };
     console.log(data);
-    if (location === [] || QueryText === "" || zipCode === []) {
+    if (location == [] || QueryText === "" || zipCode == []) {
       toast.error("Fields must not be empty!!");
     } else {
       try {
@@ -73,38 +70,40 @@ const AddEditModal = ({
     }
   };
 
-
-
   const EditQuery = async () => {
-     let loc = [];
+    let loc = [];
     location.map((item) => {
-      console.log(item)
+      console.log(item);
       loc.push(item.label);
     });
     // console.log(zipCode)
     let zip = [];
     zipCode.map((item) => {
-      console.log(item)
+      console.log(item);
       zip.push(item.value);
     });
     let data = {
       query: QueryText,
       location: loc,
-      zipcodes:zip,
+      zipcodes: zip,
     };
-    console.log(data)
-    try {
-      const res = await TotalServices.editQuery(editQueryId, data);
-      console.log(res)
-      if (res.status === 200) {
-        toast.success("Zip Code Edited Successfully");
-        getQueryData();
-        setShowQueryModal(false);
-      } else if (res.data.status !== 200) {
-        document.getElementById("error").style.display = "block";
+    console.log(data);
+    if (location == [] || QueryText === "" || zipCode == []) {
+      toast.error("Fields must not be empty!!");
+    } else {
+      try {
+        const res = await TotalServices.editQuery(editQueryId, data);
+        console.log(res);
+        if (res.status === 200) {
+          toast.success("Zip Code Edited Successfully");
+          getQueryData();
+          setShowQueryModal(false);
+        } else if (res.data.status !== 200) {
+          document.getElementById("error").style.display = "block";
+        }
+      } catch (error) {
+        console.log("error ", error);
       }
-    } catch (error) {
-      console.log("error ", error);
     }
   };
 
@@ -160,8 +159,9 @@ const AddEditModal = ({
                     options={Locations}
                     isMulti
                     onChange={(selectedOptions) => {
-                       console.log(selectedOptions)
-                      setLocation(selectedOptions)}}
+                      console.log(selectedOptions);
+                      setLocation(selectedOptions);
+                    }}
                     defaultValue={location}
                     className="text-black basic-multi-select"
                   />
@@ -175,8 +175,9 @@ const AddEditModal = ({
                     defaultValue={zipCode}
                     isMulti
                     onChange={(selectedOptions) => {
-                      console.log(selectedOptions)
-                      setZipCode(selectedOptions)}}
+                      console.log(selectedOptions);
+                      setZipCode(selectedOptions);
+                    }}
                     // onCreateOption={handleCreateOption}
                     options={zipcodeList}
                     value={zipCode}

@@ -24,11 +24,9 @@ const Filters = ({ label, options, value, onChange, onClick }) => {
       ))}
     </select> */}
       <Select
-        // value={value}
         options={options}
         isMulti
         onChange={onChange}
-        // defaultValue={value}
         className="text-black basic-multi-select"
       />
       {/* <FaFilter onClick={onClick} /> */}

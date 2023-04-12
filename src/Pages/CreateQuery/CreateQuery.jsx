@@ -91,7 +91,7 @@ const CreateQuery = () => {
           <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
             <div class="flex items-center flex-1 space-x-4">
               {/* search component--->> */}
-              <Search onSearch={handleSearch} />
+              <Search onSearch={handleSearch} validationType={"number"} getData={getZipCodeList} placeholder={"Zip Code"}/>
             </div>
 
             <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">

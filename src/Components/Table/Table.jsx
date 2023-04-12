@@ -8,6 +8,7 @@ import DeleteModal from "../Modals/DeleteModal";
 import { ScaleLoader } from "react-spinners";
 import TotalServices from "../../TotalServices";
 import { toast } from "react-toastify";
+import UseDownload from "../CustomHooks/UseDownload";
 
 const Table = ({
   queryData,
@@ -17,8 +18,7 @@ const Table = ({
   getQueryData,
   ExportCSV
 }) => {
-
- console.log(queryData)
+  const { downloadFile } = UseDownload();
   const [showDelete, setShowDelete] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
@@ -119,7 +119,7 @@ const Table = ({
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  ExportCSV(item.query_id);
+                                  downloadFile("70");
                                 }}
                                 type="button"
                                 className="btn-hover3 rounded-md py-3  flex flex-row"
