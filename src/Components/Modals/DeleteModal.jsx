@@ -1,6 +1,6 @@
 import React from "react";
 
-const DeleteModal = ({handleDelete, setShowDelete, deleteId}) => {
+const DeleteModal = ({handleDelete, setShowDeleteModal, deleteId}) => {
   return (
     <>
       {/* {showDelete ? ( */}
@@ -12,7 +12,7 @@ const DeleteModal = ({handleDelete, setShowDelete, deleteId}) => {
                   <h3 className="text-2xl font-semibold">Shall We Proceed?</h3>
                   <button
                     className="p-1 ml-auto bg-dark border-0 text-black  float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowDelete(false)}
+                    onClick={() => setShowDeleteModal(false)}
                   >
                     <span className="text-black  h-6 w-6 text-2xl block outline-none focus:outline-none">
                       ×
@@ -33,7 +33,7 @@ const DeleteModal = ({handleDelete, setShowDelete, deleteId}) => {
                     onClick={() => {
                       
                       handleDelete(deleteId);
-                      setShowDelete(false)
+                      setShowDeleteModal(false);
                     }}
                   >
                     Delete

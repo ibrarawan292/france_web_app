@@ -20,8 +20,9 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
   // } = useContext(ThemeContext);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState("");
+
+
   const handleDeleteZipCode = async (id) => {
-    console.log(id);
     setLoader(true);
     try {
       const res = await TotalServices.deleteZipCode(id);
@@ -99,7 +100,7 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
                               <button
                                 onClick={() => {
                                   setShowDeleteModal(true);
-                                  setDeleteId(item.id);
+                                  setDeleteId(item.value);
                                 }}
                                 type="button"
                                 className="px-1 py-2 rounded-full border text-red-500 hover:text-red-400 text-lg border-white "
