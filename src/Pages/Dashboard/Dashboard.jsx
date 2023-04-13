@@ -13,7 +13,7 @@ import {
 } from "react-icons/md";
 import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
 import TotalServices from "../../TotalServices";
-import { AiOutlineLogout } from "react-icons/ai";
+import { AiOutlineDashboard, AiOutlineLogout } from "react-icons/ai";
 
 const Dashboard = () => {
   const [active, setActive] = useState(1);
@@ -34,20 +34,20 @@ const Dashboard = () => {
   };
 
   // ADMIN LOGOUT API STARTS
-    const handleLogout = async () => {
-      try {
-        var res = await TotalServices.logout();
-        console.log(res, "logout");
-        if (res.msg !== "Token has expired") {
-          localStorage.removeItem("UserAuth");
-          localStorage.setItem("UserIsLogin", false);
+  const handleLogout = async () => {
+    try {
+      var res = await TotalServices.logout();
+      console.log(res, "logout");
+      if (res.msg !== "Token has expired") {
+        localStorage.removeItem("UserAuth");
+        localStorage.setItem("UserIsLogin", false);
 
-          navigate("/login");
-        }
-      } catch (error) {
-        console.log("error ", error);
+        navigate("/login");
       }
-    };
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -134,6 +134,31 @@ const Dashboard = () => {
                         toggle2();
                       }}
                       className="pl-5 py-2 rounded-md w-[90%] flex justify-between btn-hover3"
+                      to="dashboard"
+                    >
+                      <AiOutlineDashboard
+                        size="1.4em"
+                        className="mr-3 self-center"
+                      />
+                      <div className="flex w-full">
+                        <div className="text-[13px] self-center font-light cursor-pointer">
+                          Dashboard
+                        </div>
+                      </div>
+                    </NavLink>
+
+                    <NavLink
+                      end
+                      style={({ isActive }) => ({
+                        color: isActive ? "white" : "",
+                        background: isActive ? "black" : "",
+                      })}
+                      onClick={() => {
+                        setActive(4);
+
+                        toggle2();
+                      }}
+                      className="pl-5 py-2 rounded-md w-[90%] flex justify-between btn-hover3"
                       to="/manage-query"
                     >
                       <MdOutlineQueryStats
@@ -161,10 +186,7 @@ const Dashboard = () => {
                       className="pl-5 py-2 rounded-md w-[90%] flex justify-between btn-hover3"
                       to="/manage-zipcode"
                     >
-                      <MdCreate
-                        size="1.4em"
-                        className="mr-3 self-center"
-                      />
+                      <MdCreate size="1.4em" className="mr-3 self-center" />
                       <div className="flex w-full">
                         <div className="text-[13px] self-center font-light cursor-pointer">
                           Manage Zip Code
@@ -220,10 +242,7 @@ const Dashboard = () => {
                       className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
                       to="/manage-zipcode"
                     >
-                      <MdCreate
-                        size="1.4em"
-                        className="mr-3 self-center"
-                      />
+                      <MdCreate size="1.4em" className="mr-3 self-center" />
                     </NavLink>
                   </span>
                 </div>
@@ -351,10 +370,7 @@ const Dashboard = () => {
                       className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
                       to="/manage-zipcode"
                     >
-                      <MdCreate
-                        size="2em"
-                        className="mr-3 self-center"
-                      />
+                      <MdCreate size="2em" className="mr-3 self-center" />
                       <div className="flex w-full">
                         <div className="text-[20px] self-center font-light cursor-pointer">
                           Manage Zip Code
@@ -397,8 +413,8 @@ const Dashboard = () => {
             <div
               className={
                 ShrinkSettings === true
-                  ? " py-20 px-3 lg:px-0 lg:w-[75%] w-full bg-white lg:h-full flex justify-center items-start"
-                  : " py-20 px-3 lg:px-0 w-full lg:w-full bg-white lg:h-full flex justify-center items-start"
+                  ? " py-20 px-3 lg:px-0 lg:w-[75%] w-full bg-gray-50 lg:h-full flex justify-center items-start"
+                  : " py-20 px-3 lg:px-0 w-full lg:w-full bg-gray-50 lg:h-full flex justify-center items-start"
               }
             >
               <Outlet />

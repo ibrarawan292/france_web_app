@@ -8,6 +8,7 @@ import ManageQuery from "./Pages/ManageQuery/ManageQuery";
 export const ThemeContext = createContext();
 import "react-toastify/dist/ReactToastify.css";
 import ManageZipCode from "./Pages/ManageZipCode/ManageZipCode";
+import MainDashboard from "./Components/Dashboard/MainDashboard";
 function App() {
   const [activeMenu, setActiveMenu] = useState(true);
   const [DarkMode, setDarkMode] = useState(false);
@@ -27,7 +28,8 @@ function App() {
             <>
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<ProtectedRoutes />}>
-                <Route index element={<ManageQuery />} />
+                <Route index element={<MainDashboard />} />
+                <Route path="dashboard" element={<MainDashboard />} />
                 <Route path="manage-query" element={<ManageQuery />} />
                 <Route path="manage-zipcode" element={<ManageZipCode />} />
               </Route>
