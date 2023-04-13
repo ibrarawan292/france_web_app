@@ -338,6 +338,31 @@ const Dashboard = () => {
                         toggle2();
                       }}
                       className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
+                      to="dashboard"
+                    >
+                      <AiOutlineDashboard
+                        size="2em"
+                        className="mr-3 self-center"
+                      />
+                      <div className="flex w-full">
+                        <div className="text-[20px] self-center font-light cursor-pointer">
+                          Dashboard
+                        </div>
+                      </div>
+                    </NavLink>
+
+                    <NavLink
+                      end
+                      style={({ isActive }) => ({
+                        color: isActive ? "var(--txtColor2)" : "black",
+                        background: isActive ? "var(--bg-fill4)" : "",
+                      })}
+                      onClick={() => {
+                        setActive(4);
+                        setShowMenu(false);
+                        toggle2();
+                      }}
+                      className="pl-5 py-2 rounded-full w-full flex justify-between btn-hover3"
                       to="/manage-query"
                     >
                       <MdOutlineQueryStats
