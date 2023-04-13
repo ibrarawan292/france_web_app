@@ -98,30 +98,7 @@ const Dashboard = () => {
                       //   src={logo}
                       alt="France Web App"
                     />
-                    {/* <NavLink
-                      end
-                      style={({ isActive }) => ({
-                        color: isActive ? "white" : "",
-                        background: isActive ? "black" : "",
-                      })}
-                      onClick={() => {
-                        setActive(4);
 
-                        toggle2();
-                      }}
-                      className="pl-5 py-2 rounded-md w-[90%] flex justify-between btn-hover3"
-                      to="/"
-                    >
-                      <MdDashboardCustomize
-                        size="1.4em"
-                        className="mr-3 self-center"
-                      />
-                      <div className="flex w-full">
-                        <div className="text-[13px] self-center font-light cursor-pointer">
-                          Dashboard
-                        </div>
-                      </div>
-                    </NavLink> */}
                     <NavLink
                       end
                       style={({ isActive }) => ({
@@ -130,7 +107,6 @@ const Dashboard = () => {
                       })}
                       onClick={() => {
                         setActive(4);
-
                         toggle2();
                       }}
                       className="pl-5 py-2 rounded-md w-[90%] flex justify-between btn-hover3"
@@ -207,6 +183,25 @@ const Dashboard = () => {
                       alt=""
                     />
 
+                    <NavLink
+                      end
+                      style={({ isActive }) => ({
+                        color: isActive ? "white" : "",
+                        background: isActive ? "black" : "",
+                      })}
+                      onClick={() => {
+                        setActive(4);
+                        toggle2();
+                      }}
+                      className="pl-5 py-2 rounded-md w-[90%] flex justify-between btn-hover3"
+                      to="dashboard"
+                    >
+                      <AiOutlineDashboard
+                        size="1.4em"
+                        className="mr-3 self-center"
+                      />
+                    </NavLink>
+
                     {/* MENU ITEM 1 */}
                     <NavLink
                       end
@@ -254,8 +249,8 @@ const Dashboard = () => {
           <div
             className={
               ShrinkMenu
-                ? "w-full lg:w-[95%] flex flex-col items-end overflow-hidden"
-                : "w-full lg:w-[82%] flex flex-col items-end overflow-hidden"
+                ? "w-full bg-white lg:w-[95%] flex flex-col items-end overflow-hidden"
+                : "w-full bg-white lg:w-[82%] flex flex-col items-end overflow-hidden"
             }
           >
             <div
