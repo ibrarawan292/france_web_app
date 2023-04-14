@@ -36,37 +36,33 @@ const ManageQuery = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [tempData, setTempData] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [tempDataValues, setTempDataValues] = useState([]);
 
   const Locations = [
-    { label: "USA", value: "USA"},
+    { label: "USA", value: "USA" },
     { label: "CANADA", value: "CANADA" },
     { label: "FRANCE", value: "FRANCE" },
     { label: "AMERICA", value: "AMERICA" },
   ];
 
   const handleZipcodeChange = (selectedOption) => {
-    console.log(selectedOption)
-    let zipArr = []
+    console.log(selectedOption);
+    let zipArr = [];
     selectedOption.map((item) => {
-      zipArr.push(item.value)
-    }) ;
+      zipArr.push(item.value);
+    });
     setZipCodeFilter(zipArr);
-   
   };
 
   const handleLocationChange = (selectedOption) => {
-    console.log(selectedOption)
-    let locArr = []
+    console.log(selectedOption);
+    let locArr = [];
     selectedOption.map((item) => {
-      return (
-      locArr.push(item.value)
-      )
+      return locArr.push(item.value);
     });
     setLocationFilter(locArr);
   };
 
-
- 
   const getQueries = async () => {
     setLoader(true);
     try {
@@ -79,6 +75,7 @@ const ManageQuery = () => {
           zipcodes: zipcodeFilter,
         }
       );
+      console.log(res);
       if (res.data.status === 200) {
         if (res.data.pages === 1) {
           setCurrentPage(1);
@@ -88,6 +85,7 @@ const ManageQuery = () => {
         setTotalPages(res.data.pages);
         setTotalRecords(res.data.total_records);
         setTempData(res);
+        setTempDataValues(res.data);
       } else if (res.data.status !== 200) {
         document.getElementById("error").style.display = "block";
       }
@@ -104,7 +102,7 @@ const ManageQuery = () => {
     setLoader(true);
     try {
       const res = await TotalServices.getZipCodes();
-      console.log(res, "reponse")
+      console.log(res, "reponse");
       if (res.data.status === 200) {
         if (res.data.pages === 1) {
           setCurrentPage(1);
@@ -123,7 +121,6 @@ const ManageQuery = () => {
   useEffect(() => {
     getZipCodeList();
   }, []);
- 
 
   const handleShowAddQueryModal = () => {
     setShowQueryModal(true);
@@ -146,6 +143,13 @@ const ManageQuery = () => {
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
+
+  useEffect(() => {
+    if (searchTerm == "") {
+      console.log(searchTerm, "search term")
+      getQueries();
+    }
+  }, [searchTerm]);
   return (
     <>
       <section class=" w-[90%]  py-3 sm:py-5">
@@ -154,7 +158,18 @@ const ManageQuery = () => {
             <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
               <div class="flex items-center flex-1 space-x-4">
                 {/* search component--->> */}
-                <Search onSearch={handleSearch} getData={getQueries} validationType={"string"} placeholder={"Query Name"} />
+                <Search
+                  onSearch={handleSearch}
+                  getData={getQueries}
+                  // setTotalPages={setTotalPages}
+                  // setTotalRecords={setTotalRecords}
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                  // tempDataValues={tempDataValues}
+                  // setData={data}
+                  validationType={"string"}
+                  placeholder={"Query Name"}
+                />
               </div>
 
               <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
@@ -179,12 +194,14 @@ const ManageQuery = () => {
                   options={Locations}
                   value={locationFilter}
                   onChange={handleLocationChange}
+                  placeholder={"Select Location"}
                 />
                 <Filters
                   label="Zipcode"
                   options={zipcodeList}
                   value={zipcodeFilter}
                   onChange={handleZipcodeChange}
+                  placeholder={"Select ZipCode"}
                 />
               </div>
             </div>

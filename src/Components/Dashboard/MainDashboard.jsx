@@ -1,7 +1,118 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineDownload } from "react-icons/ai";
+import TotalServices from "../../TotalServices";
 
 const MainDashboard = () => {
+  const [selectedQueryCheckboxes, setSelectedQueryCheckboxes] = useState([]);
+  const [selectedZipCheckboxes, setSelectedZipCheckboxes] = useState([]);
+  const [queryData, setQueryData] = useState([""]);
+  const [zipCodes, setZipCodes] = useState([]);
+  const [recievedQueryData, setRecievedQueryData] = useState([]);
+
+  const handleQueryCheckboxChange = (e, id) => {
+    const checkboxValue = e.target.value;
+    if (e.target.checked) {
+      setSelectedQueryCheckboxes([...selectedQueryCheckboxes, checkboxValue]);
+    } else {
+      setSelectedQueryCheckboxes(
+        selectedQueryCheckboxes.filter((value) => value !== checkboxValue)
+      );
+    }
+  };
+
+  const handleZipCheckboxChange = (e, id) => {
+    // const checkboxValue = e.target.value;
+    // if (e.target.checked) {
+    //   setSelectedZipCheckboxes([...selectedZipCheckboxes, checkboxValue]);
+    // } else {
+    //   setSelectedZipCheckboxes(
+    //     selectedZipCheckboxes.filter((value) => value !== checkboxValue)
+    //   );
+    // }
+  };
+
+  let selectArry = [];
+  // let selectZip = [];
+  selectedQueryCheckboxes?.map((item) => {
+    selectArry.push(+item);
+  });
+  // selectedZipCheckboxes?.map((item) => {
+  //   selectZip.push(+item);
+  // });
+
+  const DashboardQuery = async () => {
+    let data = {
+      query_ids: selectArry,
+      location: [],
+      zipcodes: [],
+    };
+    try {
+      const res = await TotalServices.dashboardQueies(data);
+      console.log(res, "reponse");
+      if (res.data.status === 200) {
+        setRecievedQueryData(res.data.user_queries);
+      } else if (res.data.status !== 200) {
+        document.getElementById("error").style.display = "block";
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
+
+
+  useEffect(() => {
+    DashboardQuery();
+  }, [selectedQueryCheckboxes]);
+
+  const GetQueryList = async () => {
+    // setLoader(true);
+    try {
+      const res = await TotalServices.getQueryNames({
+        query: "",
+      });
+      // console.log(res.data, "reponse");
+      if (res.data.status === 200) {
+        if (res.data.pages === 1) {
+          // setCurrentPage(1);
+        }
+        // setLoader(false);
+        setQueryData(res.data.query_names);
+        // setLoader(false);
+      } else if (res.data.status !== 200) {
+        document.getElementById("error").style.display = "block";
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
+
+  useEffect(() => {
+    GetQueryList();
+  }, []);
+
+  const GetZipCodeList = async () => {
+    // setLoader(true);
+    try {
+      const res = await TotalServices.getZipCodes();
+      console.log(res.data, "reponse");
+      if (res.data.status === 200) {
+        if (res.data.pages === 1) {
+          // setCurrentPage(1);
+        }
+        // setLoader(false);
+        setZipCodes(res.data.zipcodes)
+        // setLoader(false);
+      } else if (res.data.status !== 200) {
+        document.getElementById("error").style.display = "block";
+      }
+    } catch (error) {
+      console.log("error ", error);
+    }
+  };
+
+  useEffect(() => {
+    GetZipCodeList();
+  }, []);
   return (
     <div className="w-full">
       <h2 className="font-semibold text-3xl ml-20 mb-5">Dashboard</h2>
@@ -25,12 +136,22 @@ const MainDashboard = () => {
             </span>
 
             {/* ACTIVITY LIST  */}
-            <span className="w-full h-[90%] py-5 px-10 overflow-y-scroll">
-              <label htmlFor="activity_list" className="flex">
-                <input type="checkbox" className="mr-2" />
-                First activity
-              </label>
-            </span>
+            {queryData &&
+              queryData.map((item) => {
+                return (
+                  <span className="w-full h-[90%] py-5 px-10 overflow-y-scroll">
+                    <label htmlFor="activity_list" className="flex">
+                      <input
+                        type="checkbox"
+                        className="mr-2 z-10"
+                        value={item.value}
+                        onChange={handleQueryCheckboxChange}
+                      />
+                      {item.label}
+                    </label>
+                  </span>
+                );
+              })}
           </div>
 
           <div className="w-full lg:w-11/12 flex flex-col lg:flex-row lg:justify-between">
@@ -50,12 +171,22 @@ const MainDashboard = () => {
               </span>
 
               {/* ACTIVITY LIST  */}
-              <span className="w-full h-[90%] py-5 px-10 overflow-y-scroll">
-                <label htmlFor="activity_list" className="flex">
-                  <input type="checkbox" className="mr-2" />
-                  First zip-code
-                </label>
-              </span>
+             {zipCodes &&
+              zipCodes.map((item) => {
+                return (
+                  <span className="w-full h-[90%] py-5 px-10 overflow-y-scroll">
+                    <label htmlFor="activity_list" className="flex">
+                      <input
+                        type="checkbox"
+                        className="mr-2 z-10"
+                        value={item.value}
+                        onChange={handleZipCheckboxChange}
+                      />
+                      {item.label}
+                    </label>
+                  </span>
+                );
+              })}
             </div>
 
             {/* INNER CONTAINER FOR LOCATIONS  */}
@@ -76,7 +207,7 @@ const MainDashboard = () => {
               {/* ACTIVITY LIST  */}
               <span className="w-full h-[90%] py-5 px-10 overflow-y-scroll">
                 <label htmlFor="activity_list" className="flex">
-                  <input type="checkbox" className="mr-2" />
+                  <input type="checkbox" className="mr-2 z-10" />
                   First location
                 </label>
               </span>
@@ -92,7 +223,10 @@ const MainDashboard = () => {
             </h2>
 
             <div className="w-full p-5 text-white">
-              <li>First Activity</li>
+              {recievedQueryData &&
+                recievedQueryData.map((item) => {
+                  return <li key={item.id}>{item.query_name}</li>;
+                })}
             </div>
 
             <div className="w-full p-5 text-white">

@@ -53,6 +53,14 @@ const downloadAllQuery = () => {
   return http.get("/DownloadAllQueries")
 }
 
+const getQueryNames = (data) => {
+  return http.get("/GetQueryNames", data)
+}
+
+const dashboardQueies = (data) => {
+  return http.post("/DashboardQueries", data);
+};
+
 
 
 
@@ -71,7 +79,9 @@ const TotalServices = {
   editQuery,
   getSingleQuery,
   downloadQuery,
-  downloadAllQuery
+  downloadAllQuery,
+  getQueryNames,
+  dashboardQueies
 };
 
 export default TotalServices;

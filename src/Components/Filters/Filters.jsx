@@ -1,7 +1,7 @@
 import React from "react";
 import { FaFilter } from "react-icons/fa";
 import Select from "react-select";
-const Filters = ({ options, onChange }) => {
+const Filters = ({ options, onChange, placeholder }) => {
   console.log(options)
   return (
     <>
@@ -11,6 +11,7 @@ const Filters = ({ options, onChange }) => {
         isMulti
         onChange={onChange}
         className="text-black basic-multi-select"
+        placeholder={placeholder}
       />
       {/* <FaFilter onClick={onClick} /> */}
     </>
