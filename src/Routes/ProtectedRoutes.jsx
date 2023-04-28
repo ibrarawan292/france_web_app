@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import MainDashboard from "../Components/Dashboard/MainDashboard";
 import Login from "../Pages/Auth/Login";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 

@@ -13,7 +13,7 @@ import {
 } from "react-icons/md";
 import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
 import TotalServices from "../../TotalServices";
-import { AiOutlineDashboard, AiOutlineLogout } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineDashboard, AiOutlineLogout } from "react-icons/ai";
 
 const Dashboard = () => {
   const [active, setActive] = useState(1);
@@ -94,8 +94,8 @@ const Dashboard = () => {
                     }
                   >
                     <img
-                      className="w-36 pt-2 pb-10 mr-12"
-                      //   src={logo}
+                      className="w-10 pt-2 pb-10 mr-12"
+                      src="https://cdn-icons-png.flaticon.com/512/481/481584.png"
                       alt="France Web App"
                     />
 
@@ -180,7 +180,7 @@ const Dashboard = () => {
                     <img
                       className="w-9 mt-1 ml-3 mb-10"
                       src="https://cdn-icons-png.flaticon.com/512/481/481584.png"
-                      alt=""
+                      alt="France Web App"
                     />
 
                     <NavLink
@@ -312,13 +312,13 @@ const Dashboard = () => {
                   }
                 >
                   <div className="w-full px-5 dashboard_color py-4 flex items-center justify-between">
-                    <div className="closing-menu text-white w-full flex items-center justify-between">
+                    <div className="closing-menu text-black w-full flex items-center justify-between">
                       <div className="flex pl-4 pr-10">
                         <p>France Web App</p>
                       </div>
-                      <FiMenu
-                        className="zindex-dropdown"
-                        color="white"
+                      <AiOutlineClose
+                        className="zindex-dropdown cursor-pointer"
+                        color="black"
                         onClick={() => setShowMenu(!showMenu)}
                         size="1.2em"
                       />

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../../Components/Pagination/Pagination";
-import ResultShowing from "../../Components/Pagination/ResultShowing";
 import Button from "../../Components/ButtonsComp/Button";
 import Search from "../../Components/SearchComp/Search";
 import TotalServices from "../../TotalServices";
@@ -71,16 +70,21 @@ const ManageZipCode = () => {
     setSearchTerm(value);
   };
   return (
-    <section class=" w-[90%]  py-3 sm:py-5">
-      <div class="px-4 mx-auto max-w-screen-2xl lg:px-12">
-        <div class="relative overflow-hidden  sm:rounded-lg">
-          <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
-            <div class="flex items-center flex-1 space-x-4">
+    <section className=" w-[90%]  py-3 sm:py-5">
+      <div className="px-4 mx-auto max-w-screen-2xl lg:px-12">
+        <div className="relative overflow-hidden  sm:rounded-lg">
+          <div className="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
+            <div className="flex items-center flex-1 space-x-4">
               {/* search component--->> */}
-              <Search onSearch={handleSearch} validationType={"number"} getData={getZipCodeData} placeholder={"Zip Code"}/>
+              <Search
+                onSearch={handleSearch}
+                validationType={"number"}
+                getData={getZipCodeData}
+                placeholder={"Zip Code"}
+              />
             </div>
 
-            <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
+            <div className="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
               {/* create zip button-->> */}
               <Button
                 title={"Create ZipCode"}
@@ -89,10 +93,10 @@ const ManageZipCode = () => {
             </div>
           </div>
 
-          {/* <div class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
-            <div class="flex items-center flex-1 space-x-4"></div>
+          {/* <div className="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
+            <div className="flex items-center flex-1 space-x-4"></div>
 
-            <div class="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
+            <div className="relative flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
              
 
               <Filters
@@ -103,7 +107,7 @@ const ManageZipCode = () => {
               />
             </div>
           </div> */}
-          <div class="overflow-x-auto">
+          <div className="overflow-x-auto mt-5 lg:mt-10">
             {/* query table---->> */}
             <ZipCodeTable
               zipData={zipData}
@@ -114,11 +118,11 @@ const ManageZipCode = () => {
             />
           </div>
           <nav
-            class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
+            className="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
             aria-label="Table navigation"
           >
-            <ResultShowing />
-            <ul class="inline-flex items-stretch -space-x-px">
+            <div>{/* <ResultShowing /> */}</div>
+            <ul className="inline-flex items-stretch -space-x-px">
               <Pagination
                 totalRecords={totalRecords}
                 setRecord={setRecord}

@@ -8,7 +8,7 @@ import ManageQuery from "./Pages/ManageQuery/ManageQuery";
 export const ThemeContext = createContext();
 import "react-toastify/dist/ReactToastify.css";
 import ManageZipCode from "./Pages/ManageZipCode/ManageZipCode";
-import MainDashboard from "./Components/Dashboard/MainDashboard";
+import MainDashboard from "./Pages/MainDashboard/MainDashboard";
 function App() {
   const [activeMenu, setActiveMenu] = useState(true);
   const [DarkMode, setDarkMode] = useState(false);

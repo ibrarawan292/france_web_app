@@ -16,7 +16,7 @@ const Table = ({
   loader,
   setLoader,
   getQueryData,
-  ExportCSV
+  ExportCSV,
 }) => {
   const { downloadFile } = UseDownload();
   const [showDelete, setShowDelete] = useState(false);
@@ -41,7 +41,7 @@ const Table = ({
 
   return (
     <>
-      {loader || queryData ===  0 ? (
+      {loader || queryData === 0 ? (
         <>
           <div className="bg-white p-10 flex justify-center">
             <ScaleLoader className="text-black" loading={loader} size={20} />
@@ -52,10 +52,7 @@ const Table = ({
           {queryData.length == 0 ? (
             <>
               <div className="text-center  p-16">
-                <button
-                  
-                  className="btn-hover bg-black py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-white"
-                >
+                <button className="btn-hover bg-black py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-white">
                   No Data Found
                 </button>
               </div>
@@ -63,28 +60,28 @@ const Table = ({
           ) : (
             <>
               <div>
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-white uppercase bg-gray-700 dark:bg-gray-700 dark:text-white">
                     <tr>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3">
                         QUERY NAME
                       </th>
-                      <th scope="col" class="px-4 py-3">
-                       LOCATIOIN
+                      <th scope="col" className="px-4 py-3">
+                        LOCATIOIN
                       </th>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3">
                         Data CREATED
                       </th>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3">
                         ZIP CODE
                       </th>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3">
                         STATUS
                       </th>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3">
                         DOWNLOAD
                       </th>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3">
                         ACTION
                       </th>
                     </tr>
@@ -93,33 +90,40 @@ const Table = ({
                     {queryData &&
                       queryData.map((item) => {
                         return (
-                          <tr key={item.query_id} class="border-b">
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                          <tr key={item.query_id} className="border-b">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                               {item.query_name}
                             </td>
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
-                            {item.location.map((loc) => {
-                                return <p className="w-fit bg-blue-600 text-white rounded-2xl px-4 py-1 m-1">{loc.label}</p>;
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                              {item.location.map((loc) => {
+                                return (
+                                  <p className="w-fit bg-blue-600 text-white rounded-2xl px-4 py-1 m-1">
+                                    {loc.label}
+                                  </p>
+                                );
                               })}
                             </td>
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                               {item.date_created.slice(0, 17)}
                             </td>
 
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                               {item.zipcode_data.map((zip) => {
                                 return <p>{zip.label}</p>;
                               })}
                             </td>
 
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                               {item.name}
                             </td>
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  downloadFile(item.query_id, item.date_created);
+                                  downloadFile(
+                                    item.query_id,
+                                    item.date_created
+                                  );
                                 }}
                                 type="button"
                                 className="btn-hover3 rounded-md py-3  flex flex-row"
@@ -128,7 +132,7 @@ const Table = ({
                                 Download
                               </button>
                             </td>
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                               <button
                                 onClick={() => {
                                   handleShowEditModal(item.query_id);
@@ -169,7 +173,7 @@ const Table = ({
             </>
           )}
         </>
-       )} 
+      )}
     </>
   );
 };

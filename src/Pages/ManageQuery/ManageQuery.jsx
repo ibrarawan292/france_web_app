@@ -1,18 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../../Components/SearchComp/Search";
 import Button from "../../Components/ButtonsComp/Button";
 import ExportAll from "../../Components/ButtonsComp/ExportAll";
 import Table from "../../Components/Table/Table";
 import Pagination from "../../Components/Pagination/Pagination";
-import ResultShowing from "../../Components/Pagination/ResultShowing";
-import Category from "../../Components/Filters/Category";
-import Country from "../../Components/Filters/Country";
-import ZipCode from "../../Components/Filters/ZipCode";
 import Filters from "../../Components/Filters/Filters";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { ThemeContext } from "../../App";
 import AddEditModal from "../../Components/Modals/AddEditModal";
 import TotalServices from "../../TotalServices";
+import { Locations } from "../../Components/LocationsList/Locations";
+
 const ManageQuery = () => {
   const [loader, setLoader] = useState(false);
   const [showQueryModal, setShowQueryModal] = useState(false);
@@ -37,13 +33,6 @@ const ManageQuery = () => {
   const [tempData, setTempData] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [tempDataValues, setTempDataValues] = useState([]);
-
-  const Locations = [
-    { label: "USA", value: "USA" },
-    { label: "CANADA", value: "CANADA" },
-    { label: "FRANCE", value: "FRANCE" },
-    { label: "AMERICA", value: "AMERICA" },
-  ];
 
   const handleZipcodeChange = (selectedOption) => {
     console.log(selectedOption);
@@ -84,8 +73,6 @@ const ManageQuery = () => {
         setData(res.data.user_queries);
         setTotalPages(res.data.pages);
         setTotalRecords(res.data.total_records);
-        setTempData(res);
-        setTempDataValues(res.data);
       } else if (res.data.status !== 200) {
         document.getElementById("error").style.display = "block";
       }
@@ -144,12 +131,6 @@ const ManageQuery = () => {
     setSearchTerm(value);
   };
 
-  useEffect(() => {
-    if (searchTerm == "") {
-      console.log(searchTerm, "search term")
-      getQueries();
-    }
-  }, [searchTerm]);
   return (
     <>
       <section class=" w-[90%]  py-3 sm:py-5">
@@ -161,12 +142,8 @@ const ManageQuery = () => {
                 <Search
                   onSearch={handleSearch}
                   getData={getQueries}
-                  // setTotalPages={setTotalPages}
-                  // setTotalRecords={setTotalRecords}
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
-                  // tempDataValues={tempDataValues}
-                  // setData={data}
                   validationType={"string"}
                   placeholder={"Query Name"}
                 />
@@ -213,14 +190,13 @@ const ManageQuery = () => {
                 loader={loader}
                 setLoader={setLoader}
                 getQueryData={getQueries}
-                // ExportCSV={ExportCSV}
               />
             </div>
             <nav
               class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
               aria-label="Table navigation"
             >
-              <ResultShowing />
+              <div>{/* <ResultShowing /> */}</div>
               <ul class="inline-flex items-stretch -space-x-px">
                 <Pagination
                   totalRecords={totalRecords}

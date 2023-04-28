@@ -1,48 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import React, {useState } from "react";
+import {  toast } from "react-toastify";
 
-const Search = ({
-  onSearch,
-  getData,
-
-  searchTerm,
-
-  validationType,
-  placeholder,
-}) => {
+const Search = ({ onSearch, validationType, placeholder }) => {
   const [searchValue, setSearchValue] = useState("");
 
-  function handleInputChange(event) {
-    console.log(event.target.value);
-
-    const enteredValue = event.target.value.trim();
-    let isValidInput = true;
-
-    if (validationType === "string") {
-      isValidInput = /^[a-zA-Z]+$/.test(enteredValue);
-
-      setSearchValue(enteredValue);
-    } else if (validationType === "number") {
-      isValidInput = /^\d+$/.test(enteredValue);
-      setSearchValue(enteredValue);
-    }
-  }
-
-  // useEffect(() => {
-  //   if (searchTerm === "" || searchValue === "") {
-  //     getData();
-  //   }
-  // }, [searchTerm, searchValue]);
-
   const handleSearch = () => {
-    onSearch(searchValue);
+    if (!searchValue.trim()) {
+      toast.error("Please enter a value");
+    } else if (validationType === "string" && !/^[a-zA-Z\s]+$/.test(searchValue)) {
+      toast.error(`Invalid input: Please search for a ${placeholder}`);
+    } else if (validationType === "number" && !/^[+]?[\d]+$/.test(searchValue)) {
+      toast.error(`Invalid input: Please search for a ${placeholder}`);
+    } else {
+      onSearch(searchValue);
+    }
   };
 
   return (
     <div>
-      {/* <ToastContainer/> */}
       <form
-        // type="submit"
         class="flex items-center"
         onSubmit={(e) => {
           e.preventDefault();
@@ -71,11 +47,19 @@ const Search = ({
             className="border-2 border-black text-black rounded-lg focus:border-black block w-full pl-10 p-1  dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500 "
             required=""
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={(e) => (
+              e.target.value === "" && onSearch(""),
+              setSearchValue(e.target.value)
+            )}
             placeholder={`Search ${placeholder}`}
           />
         </div>
-        <button onClick={handleSearch}>Search</button>
+        <button
+          className="rounded-lg bg-blue-600 py-1 ml-2 text-white px-2"
+          type="submit"
+        >
+          Search
+        </button>
       </form>
     </div>
   );

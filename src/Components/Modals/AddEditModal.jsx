@@ -109,83 +109,80 @@ const AddEditModal = ({
 
   return (
     <>
-      {/* {showModal ? ( */}
-      <ToastContainer />
-      <>
-        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-0 p-0">
-          <div className="relative w-auto my-6 mx-auto max-w-full">
-            <div
-              className={
-                isEditQuery === true
-                  ? "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
-                  : "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
-              }
-            >
-              <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                <h3 className="text-3xl font-semibold">
-                  {isEditQuery === true ? "Edit Query" : "Create Query"}
-                </h3>
-                <button
-                  className="p-1 ml-auto bg-dark border-0 text-black  float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                  onClick={() => setShowQueryModal(false)}
-                >
-                  <span className="text-black  h-6 w-6 text-2xl block outline-none focus:outline-none">
-                    ×
-                  </span>
-                </button>
+      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-0 p-0">
+        <div className="relative w-auto my-6 mx-auto max-w-full">
+          <div
+            className={
+              isEditQuery === true
+                ? "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
+                : "border-0 mt-12 rounded-lg shadow-lg relative flex flex-col w-[500px] bg-white outline-none focus:outline-none"
+            }
+          >
+            <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+              <h3 className="text-3xl font-semibold">
+                {isEditQuery === true ? "Edit Query" : "Create Query"}
+              </h3>
+              <button
+                className="p-1 ml-auto bg-dark border-0 text-black  float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                onClick={() => setShowQueryModal(false)}
+              >
+                <span className="text-black  h-6 w-6 text-2xl block outline-none focus:outline-none">
+                  ×
+                </span>
+              </button>
+            </div>
+            <div className="relative p-6 flex flex-col text-left ">
+              <div>
+                <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
+                  Query <span className="text-red-900">*</span>
+                </p>
+                <input
+                  type="text"
+                  className="w-full rounded-md border p-2 border-gray-300"
+                  placeholder={
+                    isEditQuery === true ? "Query Edit" : "Query Name"
+                  }
+                  value={QueryText}
+                  onChange={(e) => setQueryText(e.target.value)}
+                />
               </div>
-              <div className="relative p-6 flex flex-col text-left ">
-                <div>
-                  <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
-                    Query <span className="text-red-900">*</span>
-                  </p>
-                  <input
-                    type="text"
-                    className="w-full rounded-md border p-2 border-gray-300"
-                    placeholder={
-                      isEditQuery === true ? "Query Edit" : "Query Name"
-                    }
-                    value={QueryText}
-                    onChange={(e) => setQueryText(e.target.value)}
-                  />
-                </div>
 
-                <div>
-                  <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
-                    Location <span className="text-red-900">*</span>
-                  </p>
-                  <Select
-                    value={location}
-                    options={Locations}
-                    isMulti
-                    onChange={(selectedOptions) => {
-                      console.log(selectedOptions);
-                      setLocation(selectedOptions);
-                    }}
-                    defaultValue={location}
-                    className="text-black basic-multi-select"
-                  />
-                </div>
+              <div>
+                <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
+                  Location <span className="text-red-900">*</span>
+                </p>
+                <Select
+                  value={location}
+                  options={Locations}
+                  isMulti
+                  onChange={(selectedOptions) => {
+                    console.log(selectedOptions);
+                    setLocation(selectedOptions);
+                  }}
+                  defaultValue={location}
+                  className="text-black basic-multi-select"
+                />
+              </div>
 
-                <div>
-                  <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
-                    ZipCodes <span className="text-red-900">*</span>
-                  </p>
-                  <CreatableSelect
-                    defaultValue={zipCode}
-                    isMulti
-                    onChange={(selectedOptions) => {
-                      console.log(selectedOptions);
-                      setZipCode(selectedOptions);
-                    }}
-                    // onCreateOption={handleCreateOption}
-                    options={zipcodeList}
-                    value={zipCode}
-                    className="text-black basic-multi-select"
-                  />
-                </div>
+              <div>
+                <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
+                  ZipCodes <span className="text-red-900">*</span>
+                </p>
+                <CreatableSelect
+                  defaultValue={zipCode}
+                  isMulti
+                  onChange={(selectedOptions) => {
+                    console.log(selectedOptions);
+                    setZipCode(selectedOptions);
+                  }}
+                  // onCreateOption={handleCreateOption}
+                  options={zipcodeList}
+                  value={zipCode}
+                  className="text-black basic-multi-select"
+                />
+              </div>
 
-                {/* <div>
+              {/* <div>
                   <p className="text-gray-500 whitespace-no-wrap text-sm mt-3 mb-1">
                     Add NEW ZIPCODE <span className="text-red-900">*</span>
                   </p>
@@ -199,35 +196,33 @@ const AddEditModal = ({
                     onChange={(e) => setNewZipCode(e.target.value)}
                   />
                 </div> */}
-              </div>
-              {/*footer*/}
+            </div>
+            {/*footer*/}
 
-              <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                <button
-                  style={{ background: "black" }}
-                  className="btn text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  type="button"
-                  onClick={() => setShowQueryModal(false)}
-                >
-                  Close
-                </button>
-                <button
-                  style={{ background: "var(--bg-fill4)" }}
-                  className="btn-hover text-black border-2 border-black font-bold uppercase text-sm px-6 py-[10px] rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  type="button"
-                  onClick={() => {
-                    isEditQuery === true ? EditQuery() : CreateQuery();
-                  }}
-                >
-                  {isEditQuery === true ? "Edit Query" : "Create Query"}
-                </button>
-              </div>
+            <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+              <button
+                style={{ background: "black" }}
+                className="btn text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button"
+                onClick={() => setShowQueryModal(false)}
+              >
+                Close
+              </button>
+              <button
+                style={{ background: "var(--bg-fill4)" }}
+                className="btn-hover text-black border-2 border-black font-bold uppercase text-sm px-6 py-[10px] rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button"
+                onClick={() => {
+                  isEditQuery === true ? EditQuery() : CreateQuery();
+                }}
+              >
+                {isEditQuery === true ? "Edit Query" : "Create Query"}
+              </button>
             </div>
           </div>
         </div>
-        <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-      </>
-      {/* ) : null} */}
+      </div>
+      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </>
   );
 };

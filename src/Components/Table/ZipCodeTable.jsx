@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  AiOutlineDelete,
-  AiOutlineEdit,
-} from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { ThemeContext } from "../../App";
 import TotalServices from "../../TotalServices";
 import DeleteModal from "../Modals/DeleteModal";
 import { ScaleLoader } from "react-spinners";
 import { toast } from "react-toastify";
 
-const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipCodeList}) => {
+const ZipCodeTable = ({
+  zipData,
+  handleShowEditModal,
+  setLoader,
+  loader,
+  getZipCodeList,
+}) => {
   // const {
   //   showZipped,
   //   setShowZipped,
@@ -21,7 +24,6 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState("");
 
-
   const handleDeleteZipCode = async (id) => {
     setLoader(true);
     try {
@@ -31,7 +33,7 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
         toast.success("Zip Code Deleted successfully");
         setShowDeleteModal(false);
         setLoader(false);
-        getZipCodeList()
+        getZipCodeList();
       }
     } catch (error) {
       console.log(error);
@@ -51,10 +53,7 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
             <>
               <>
                 <div className="text-center p-16">
-                  <button
-                    
-                    className="btn-hover bg-black py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-white"
-                  >
+                  <button className="btn-hover bg-black py-2 mr-5 px-10 mt-5 mb-4 content-center	 md:mt-0 w-full md:w-fit rounded-md text-white">
                     No data Found
                   </button>
                 </div>
@@ -63,13 +62,13 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
           ) : (
             <>
               <div>
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-white uppercase bg-gray-700 dark:bg-gray-700 dark:text-white">
                     <tr>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3">
                         Zip Code
                       </th>
-                      <th scope="col" class="px-4 py-3">
+                      <th scope="col" className="px-4 py-3 text-right pr-10">
                         ACTION
                       </th>
                     </tr>
@@ -78,11 +77,11 @@ const ZipCodeTable = ({ zipData, handleShowEditModal, setLoader, loader ,getZipC
                     {zipData &&
                       zipData.map((item, index) => {
                         return (
-                          <tr key={item.value} class="border-b  ">
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                          <tr key={item.value} className="border-b">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
                               {item.label}
                             </td>
-                            <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap ">
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap text-right pr-10 ">
                               <button
                                 onClick={() => {
                                   handleShowEditModal(item, item.value);
